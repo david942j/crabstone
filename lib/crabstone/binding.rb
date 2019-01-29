@@ -2,7 +2,6 @@ require 'ffi'
 
 module Crabstone
   module Binding
-
     extend FFI::Library
     ffi_lib ['capstone', 'libcapstone.so.3']
 
@@ -13,7 +12,7 @@ module Crabstone
     when 32
       typedef :ulong, :size_t
     else
-      fail "Unsupported native address size"
+      raise 'Unsupported native address size'
     end
 
     typedef :size_t, :csh
@@ -66,7 +65,7 @@ module Crabstone
       end
     end
 
-    callback :skipdata_cb, [:pointer, :size_t, :size_t, :pointer], :size_t
+    callback :skipdata_cb, %i[pointer size_t size_t pointer], :size_t
 
     class SkipdataConfig < FFI::Struct
       layout(
@@ -78,27 +77,27 @@ module Crabstone
 
     attach_function(
       :cs_disasm,
-      [:csh, :pointer, :size_t, :ulong_long, :size_t, :pointer],
+      %i[csh pointer size_t ulong_long size_t pointer],
       :size_t
     )
     attach_function :cs_close, [:pointer], :cs_err
     attach_function :cs_errno, [:csh], :cs_err
-    attach_function :cs_group_name, [:csh, :uint], :string
+    attach_function :cs_group_name, %i[csh uint], :string
     attach_function :cs_insn_group, [:csh, Instruction, :uint], :bool
-    attach_function :cs_insn_name, [:csh, :uint], :string
+    attach_function :cs_insn_name, %i[csh uint], :string
     attach_function :cs_op_count, [:csh, Instruction, :uint], :cs_err
-    attach_function :cs_open, [:cs_arch, :cs_mode, :pointer], :cs_err
-    attach_function :cs_option, [:csh, :cs_opt_type, :cs_opt_value], :cs_err
-    attach_function :cs_reg_name, [:csh, :uint], :string
+    attach_function :cs_open, %i[cs_arch cs_mode pointer], :cs_err
+    attach_function :cs_option, %i[csh cs_opt_type cs_opt_value], :cs_err
+    attach_function :cs_reg_name, %i[csh uint], :string
     attach_function :cs_reg_read, [:csh, Instruction, :uint], :bool
     attach_function :cs_reg_write, [:csh, Instruction, :uint], :bool
     attach_function :cs_strerror, [:cs_err], :string
     attach_function :cs_support, [:cs_arch], :bool
-    attach_function :cs_version, [:pointer, :pointer], :uint
-    attach_function :memcpy, [:pointer, :pointer, :size_t], :pointer
+    attach_function :cs_version, %i[pointer pointer], :uint
+    attach_function :memcpy, %i[pointer pointer size_t], :pointer
     attach_function :malloc, [:size_t], :pointer
     attach_function :free, [:pointer], :void
-  end # Binding
+  end
 
   # This is a C engine build option, so we can set it here, not when we
   # instantiate a new Disassembler.
@@ -108,5 +107,4 @@ module Crabstone
   # - No regs_read, regs_write or groups ( even with detail on )
   # - No reg_name or insn_name id2str convenience functions
   # - detail mode CAN still be on - so the arch insn operands MAY be available
-
 end

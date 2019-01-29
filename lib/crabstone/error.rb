@@ -15,27 +15,28 @@ module Crabstone
   class ErrX86Intel < StandardError; end
 
   ERRNO = {
-    0  => ErrOK,
-    1  => ErrMem,
-    2  => ErrArch,
-    3  => ErrHandle,
-    4  => ErrCsh,
-    5  => ErrMode,
-    6  => ErrOption,
-    7  => ErrDetail,
-    8  => ErrMemSetup,
-    9  => ErrVersion,
+    0 => ErrOK,
+    1 => ErrMem,
+    2 => ErrArch,
+    3 => ErrHandle,
+    4 => ErrCsh,
+    5 => ErrMode,
+    6 => ErrOption,
+    7 => ErrDetail,
+    8 => ErrMemSetup,
+    9 => ErrVersion,
     10 => ErrDiet,
     11 => ErrSkipData,
     12 => ErrX86ATT,
-    13 => ErrX86Intel,
-  }
+    13 => ErrX86Intel
+  }.freeze
 
   ERRNO_KLASS = ERRNO.invert
 
-  def self.raise_errno errno
+  def self.raise_errno(errno)
     err_klass = ERRNO[errno]
-    raise RuntimeError, "Internal Error: Tried to raise unknown errno" unless err_klass
+    raise 'Internal Error: Tried to raise unknown errno' unless err_klass
+
     err_str = Binding.cs_strerror(errno)
     raise err_klass, err_str
   end

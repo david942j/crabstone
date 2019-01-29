@@ -21,7 +21,6 @@ require_relative 'crabstone/arch/xcore'
 require_relative 'crabstone/arch/xcore_registers'
 
 module Crabstone
-
   # API version
   BINDING_MAJ = 3
   BINDING_MIN = 0
@@ -55,7 +54,6 @@ module Crabstone
   MODE_BIG_ENDIAN    = 1 << 31 # big-endian mode
   MODE_MIPS32        = MODE_32 # Mips32 ISA (Mips)
   MODE_MIPS64        = MODE_64 # Mips64 ISA (Mips)
-
 
   # Capstone option type
   OPT_SYNTAX         = 1  # Intel X86 asm syntax (ARCH_X86 arch)
@@ -93,22 +91,6 @@ module Crabstone
   # query id for cs_support()
   SUPPORT_DIET       = ARCH_ALL + 1
   SUPPORT_X86_REDUCE = ARCH_ALL + 2
-
-  SYNTAX = {
-    :intel      => 1,
-    :att        => 2,
-    :no_regname => 3 # for PPC only
-  }
-
-  DETAIL = {
-    true  => 3, #trololol
-    false => 0
-  }
-
-  SKIPDATA = {
-    true  => 3, #trololol
-    false => 0
-  }
 end
 
 require 'crabstone/binding'
