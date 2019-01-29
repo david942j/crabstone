@@ -31,6 +31,7 @@ module Crabstone
     13 => ErrX86Intel
   }.freeze
 
+  # TODO: remove this
   ERRNO_KLASS = ERRNO.invert
 
   def self.raise_errno(errno)

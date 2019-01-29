@@ -3,23 +3,6 @@
 # Additional binding work by Ben Nagy
 # (c) 2013 COSEINC. All Rights Reserved.
 
-require_relative 'crabstone/arch/x86'
-require_relative 'crabstone/arch/x86_registers'
-require_relative 'crabstone/arch/arm'
-require_relative 'crabstone/arch/arm_registers'
-require_relative 'crabstone/arch/arm64'
-require_relative 'crabstone/arch/arm64_registers'
-require_relative 'crabstone/arch/mips'
-require_relative 'crabstone/arch/mips_registers'
-require_relative 'crabstone/arch/ppc'
-require_relative 'crabstone/arch/ppc_registers'
-require_relative 'crabstone/arch/sparc'
-require_relative 'crabstone/arch/sparc_registers'
-require_relative 'crabstone/arch/systemz'
-require_relative 'crabstone/arch/sysz_registers'
-require_relative 'crabstone/arch/xcore'
-require_relative 'crabstone/arch/xcore_registers'
-
 module Crabstone
   # API version
   BINDING_MAJ = 3

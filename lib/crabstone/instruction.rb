@@ -23,17 +23,12 @@ module Crabstone
       ARCH_SYSZ => SysZ,
       ARCH_XCORE => XCore
     }.freeze
+
     def initialize(csh, insn, arch)
       @arch       = arch
       @csh        = csh
       @raw_insn   = insn
-      if detailed?
-        @detail     = insn[:detail]
-        @arch_insn  = @detail[:arch][ARCHS[arch]]
-        @regs_read  = @detail[:regs_read].first(@detail[:regs_read_count])
-        @regs_write = @detail[:regs_write].first(@detail[:regs_write_count])
-        @groups     = @detail[:groups].first(@detail[:groups_count])
-      end
+      init_detail(insn[:detail]) if detailed?
     end
 
     def name
@@ -124,7 +119,7 @@ module Crabstone
     # members that have special handling for detail mode or diet mode are
     # handled above. The rest is dynamically dispatched below.
     def method_missing(meth, *args)
-      if raw_insn.members.include? meth
+      if raw_insn.members.include?(meth)
         # Dispatch to toplevel Instruction class ( this file )
         raw_insn[meth]
       else
@@ -136,14 +131,23 @@ module Crabstone
           )
         end
         # Dispatch to the architecture specific Instruction ( in arch/ )
-        if @arch_insn.respond_to? meth
-          @arch_insn.send meth, *args
-        elsif @arch_insn.members.include? meth
+        if @arch_insn.respond_to?(meth)
+          @arch_insn.__send__(meth, *args)
+        elsif @arch_insn.members.include?(meth)
           @arch_insn[meth]
         else
-          raise NoMethodError, "Unknown method #{meth} for #{self.class}"
+          super
         end
       end
+    end
+
+    def respond_to_missing?(meth)
+      return true if raw_insn.members.include?(meth)
+      return false unless detailed?
+      return true if @arch_insn.respond_to?(meth)
+      return true if @arch_insn.members.include?(meth)
+
+      false
     end
 
     private
@@ -154,6 +158,14 @@ module Crabstone
 
     def raise_if_diet
       Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDiet]) if DIET_MODE
+    end
+
+    def init_detail(detail)
+      @detail     = detail
+      @arch_insn  = @detail[:arch][ARCHS[arch]]
+      @regs_read  = @detail[:regs_read].first(@detail[:regs_read_count])
+      @regs_write = @detail[:regs_write].first(@detail[:regs_write_count])
+      @groups     = @detail[:groups].first(@detail[:groups_count])
     end
   end
 end

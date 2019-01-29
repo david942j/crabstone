@@ -1,5 +1,7 @@
 require 'ffi'
 
+require 'crabstone/arch/all'
+
 module Crabstone
   module Binding
     extend FFI::Library

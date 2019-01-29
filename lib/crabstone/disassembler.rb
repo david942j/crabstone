@@ -1,4 +1,7 @@
+require 'ffi'
+
 require 'crabstone/binding'
+require 'crabstone/error'
 require 'crabstone/instruction'
 
 module Crabstone
@@ -40,23 +43,24 @@ module Crabstone
 
     # After you close the engine, don't use it anymore. Can't believe I even
     # have to write this.
+    #
+    # @return [void]
     def close
-      if (res = Binding.cs_close(@p_csh)).nonzero?
-        Crabstone.raise_errno res
-      end
+      res = Binding.cs_close(@p_csh)
+      Crabstone.raise_errno(res) unless res.zero?
     end
 
     def syntax=(new_stx)
       Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless SYNTAX[new_stx]
-      res = Binding.cs_option(csh, OPT_SYNTAX, SYNTAX[new_stx])
-      Crabstone.raise_errno res if res.nonzero?
+      set_raw_option(OPT_SYNTAX, SYNTAX[new_stx])
       @syntax = new_stx
     end
 
+    # @param [Boolean] new_val
     def decomposer=(new_val)
-      res = Binding.cs_option(csh, OPT_DETAIL, DETAIL[!!new_val])
-      Crabstone.raise_errno res if res.nonzero?
-      @decomposer = !!new_val
+      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless DETAIL[new_val]
+      set_raw_option(OPT_DETAIL, DETAIL[new_val])
+      @decomposer = new_val
     end
 
     def version
@@ -71,43 +75,34 @@ module Crabstone
     end
 
     def errno
-      Binding.cs_errno(csh)
+      Binding.cs_errno(@csh)
     end
 
     def skipdata(mnemonic = '.byte')
       cfg = Binding::SkipdataConfig.new
-      cfg[:mnemonic] = FFI::MemoryPointer.from_string String(mnemonic)
+      cfg[:mnemonic] = FFI::MemoryPointer.from_string(mnemonic.to_s)
 
       if block_given?
-
-        real_cb = FFI::Function.new(
+        cfg[:callback] = FFI::Function.new(
           :size_t,
           %i[pointer size_t size_t pointer]
         ) do |code, sz, offset, _|
-
           code = code.read_array_of_uchar(sz).pack('c*')
           begin
-            res = yield code, offset
-            Integer(res)
+            Integer(yield(code, offset))
           rescue StandardError
             warn "Error in skipdata callback: #{$ERROR_INFO}"
             # It will go on to crash, but now at least there's more info :)
           end
         end
-
-        cfg[:callback] = real_cb
-
       end
 
-      res = Binding.cs_option(csh, OPT_SKIPDATA_SETUP, cfg.pointer.address)
-      Crabstone.raise_errno res if res.nonzero?
-      res = Binding.cs_option(csh, OPT_SKIPDATA, SKIPDATA[true])
-      Crabstone.raise_errno res if res.nonzero?
+      set_raw_option(OPT_SKIPDATA_SETUP, cfg.pointer.address)
+      set_raw_option(OPT_SKIPDATA, SKIPDATA[true])
     end
 
     def skipdata_off
-      res = Binding.cs_option(csh, OPT_SKIPDATA, SKIPDATA[false])
-      Crabstone.raise_errno res if res.nonzero?
+      set_raw_option(OPT_SKIPDATA, SKIPDATA[false])
     end
 
     def reg_name(regid)
@@ -117,10 +112,11 @@ module Crabstone
       name
     end
 
+    # @return [Array<Crabstone::Instruction>]
     def disasm(code, offset, count = 0)
       return [] if code.empty?
 
-      insn_ptr   = FFI::MemoryPointer.new :pointer
+      insn_ptr   = FFI::MemoryPointer.new(:pointer)
       insn_count = Binding.cs_disasm(
         @csh,
         code,
@@ -131,21 +127,27 @@ module Crabstone
       )
       Crabstone.raise_errno(errno) if insn_count.zero?
 
-      insns = (0...insn_count * Binding::Instruction.size).step(Binding::Instruction.size).map do |off|
-        cs_insn_ptr = Binding.malloc Binding::Instruction.size
-        cs_insn = Binding::Instruction.new cs_insn_ptr
-        Binding.memcpy(cs_insn_ptr, insn_ptr.read_pointer + off, Binding::Instruction.size)
-        Instruction.new @csh, cs_insn, @arch
-      end
-
-      Binding.free(insn_ptr.read_pointer)
-
-      insns
+      convert_disasm_result(insn_ptr, insn_count).tap { Binding.free(insn_ptr.read_pointer) }
     end
 
     def set_raw_option(opt, val)
-      res = Binding.cs_option csh, opt, val
-      Crabstone.raise_errno res if res.nonzero?
+      res = Binding.cs_option(csh, opt, val)
+      Crabstone.raise_errno(res) if res.nonzero?
+    end
+
+    private
+
+    # Convert the insn_ptr from cs_disasm into Ruby instruction objects.
+    # @param [FFI::MemoryPointer] insn_ptr
+    # @param [Integer] insn_count
+    # @return [Array<Crabstone::Instruction>]
+    def convert_disasm_result(insn_ptr, insn_count)
+      insn_sz = Binding::Instruction.size
+      Array.new(insn_count) do |i|
+        cs_insn_ptr = Binding.malloc(insn_sz)
+        Binding.memcpy(cs_insn_ptr, insn_ptr.read_pointer + i * insn_sz, insn_sz)
+        Crabstone::Instruction.new(@csh, Binding::Instruction.new(cs_insn_ptr), @arch)
+      end
     end
   end
 end
