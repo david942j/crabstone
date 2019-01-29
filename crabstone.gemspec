@@ -1,4 +1,4 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'date'
@@ -15,12 +15,6 @@ Gem::Specification.new do |spec|
   spec.homepage   = 'https://github.com/david942j/crabstone'
   spec.summary    = 'Ruby FFI bindings for the capstone disassembly engine'
   spec.files      = Dir['lib/**/*.rb']
-
-  spec.extra_rdoc_files = ['CHANGES.md', 'README.md', 'MANIFEST']
-
-  spec.add_runtime_dependency 'ffi' unless RUBY_PLATFORM =~/java/
-  spec.add_development_dependency 'test-unit'
-
   spec.description = <<-EOS
 
   Capstone is a disassembly engine written by Nguyen Anh Quynh, available here
@@ -29,4 +23,11 @@ Gem::Specification.new do |spec|
   2.2.1.
 
   EOS
+
+  spec.extra_rdoc_files = ['CHANGES.md', 'README.md', 'MANIFEST']
+
+  spec.add_runtime_dependency 'ffi' unless RUBY_PLATFORM =~ /java/
+
+  spec.add_development_dependency 'rake', '~> 12'
+  spec.add_development_dependency 'test-unit'
 end

@@ -2,4 +2,4 @@
 *.swp
 *.sublime-workspace
 .DS_Store
-
+Gemfile.lock
