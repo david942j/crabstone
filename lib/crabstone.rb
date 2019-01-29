@@ -76,7 +76,5 @@ module Crabstone
   SUPPORT_X86_REDUCE = ARCH_ALL + 2
 end
 
-require 'crabstone/binding'
 require 'crabstone/disassembler'
-require 'crabstone/error'
 require 'crabstone/version'

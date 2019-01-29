@@ -1,65 +1,10 @@
-require 'ffi'
+require 'crabstone/binding/structs'
 
-require 'crabstone/arch/all'
-
+# TODO: This file should require proper files according to the
+# return value of cs_version.
 module Crabstone
   module Binding
-    extend FFI::Library
-    ffi_lib ['capstone', 'libcapstone.so.3']
-
-    # This is because JRuby FFI on x64 Windows thinks size_t is 32 bit
-    case FFI::Platform::ADDRESS_SIZE
-    when 64
-      typedef :ulong_long, :size_t
-    when 32
-      typedef :ulong, :size_t
-    else
-      raise 'Unsupported native address size'
-    end
-
-    typedef :size_t, :csh
-    typedef :size_t, :cs_opt_value
-    typedef :uint, :cs_opt_type
-    typedef :uint, :cs_err
-    typedef :uint, :cs_arch
-    typedef :uint, :cs_mode
-
-    class Architecture < FFI::Union
-      layout(
-        :arm, ARM::Instruction,
-        :arm64, ARM64::Instruction,
-        :mips, MIPS::Instruction,
-        :x86, X86::Instruction,
-        :ppc, PPC::Instruction,
-        :sparc, Sparc::Instruction,
-        :sysz, SysZ::Instruction,
-        :xcore, XCore::Instruction
-      )
-    end
-
-    class Detail < FFI::Struct
-      layout(
-        :regs_read, [:uint8, 12],
-        :regs_read_count, :uint8,
-        :regs_write, [:uint8, 20],
-        :regs_write_count, :uint8,
-        :groups, [:uint8, 8],
-        :groups_count, :uint8,
-        :arch, Architecture
-      )
-    end
-
     class Instruction < FFI::ManagedStruct
-      layout(
-        :id, :uint,
-        :address, :ulong_long,
-        :size, :uint16,
-        :bytes, [:uchar, 16],
-        :mnemonic, [:char, 32],
-        :op_str, [:char, 160],
-        :detail, Detail.by_ref
-      )
-
       def self.release(ptr)
         detail_ptr = ptr.+(Instruction.offset_of(:detail)).read_pointer
         Binding.free(detail_ptr)
@@ -67,16 +12,7 @@ module Crabstone
       end
     end
 
-    callback :skipdata_cb, %i[pointer size_t size_t pointer], :size_t
-
-    class SkipdataConfig < FFI::Struct
-      layout(
-        :mnemonic, :pointer,
-        :callback, :skipdata_cb,
-        :unused, :pointer
-      )
-    end
-
+    # These APIs still might be changed in a new Capstone version.
     attach_function(
       :cs_disasm,
       %i[csh pointer size_t ulong_long size_t pointer],
@@ -103,7 +39,7 @@ module Crabstone
 
   # This is a C engine build option, so we can set it here, not when we
   # instantiate a new Disassembler.
-  DIET_MODE = Binding.cs_support SUPPORT_DIET
+  DIET_MODE = Binding.cs_support(SUPPORT_DIET)
   # Diet mode means:
   # - No op_str or mnemonic in Instruction
   # - No regs_read, regs_write or groups ( even with detail on )
