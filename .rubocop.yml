@@ -23,3 +23,6 @@ Metrics/ModuleLength:
 
 Style/Documentation: # TODO: enable this cop
   Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
