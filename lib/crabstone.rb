@@ -6,6 +6,5 @@
 module Crabstone
 end
 
-require 'crabstone/constants'
 require 'crabstone/disassembler'
 require 'crabstone/version'

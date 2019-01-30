@@ -1,3 +1,5 @@
+require 'crabstone/constants'
+
 module Crabstone
   class Instruction
     attr_reader :arch, :csh, :raw_insn

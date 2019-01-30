@@ -1,6 +1,6 @@
 require 'ffi'
 
-require 'crabstone/binding/binding'
+require 'crabstone/binding'
 require 'crabstone/error'
 require 'crabstone/instruction'
 

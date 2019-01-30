@@ -1,4 +1,4 @@
-require 'crabstone/arch/all'
+require 'crabstone/arch'
 
 # TODO: This file will be an auto-genreated one.
 module Crabstone

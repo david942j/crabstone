@@ -1,4 +1,5 @@
 require 'crabstone/binding/structs'
+require 'crabstone/constants'
 
 # TODO: This file should require proper files according to the
 # return value of cs_version.
