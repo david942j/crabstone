@@ -9,16 +9,15 @@
 
 module Crabstone
   module XCore
-
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-    
+
     # XCore registers
-    
+
     REG_INVALID = 0
     REG_CP = 1
     REG_DP = 2
@@ -36,7 +35,7 @@ module Crabstone
     REG_R9 = 14
     REG_R10 = 15
     REG_R11 = 16
-    
+
     # pseudo registers
     REG_PC = 17
     REG_SCP = 18
@@ -48,9 +47,9 @@ module Crabstone
     REG_KSP = 24
     REG_ID = 25
     REG_ENDING = 26
-    
+
     # XCore instruction
-    
+
     INS_INVALID = 0
     INS_ADD = 1
     INS_ANDNOT = 2
@@ -173,11 +172,11 @@ module Crabstone
     INS_XOR = 119
     INS_ZEXT = 120
     INS_ENDING = 121
-    
+
     # Group of XCore instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
     GRP_ENDING = 2

@@ -244,22 +244,20 @@ module Crabstone
       'R13W' => 231,
       'R14W' => 232,
       'R15W' => 233
-    }
+    }.freeze
 
     ID_LOOKUP = REG_LOOKUP.invert
 
     # alias registers
 
-    SYM_LOOKUP = Hash[REG_LOOKUP.map {|k,v| [k.downcase.to_sym,v]}]
+    SYM_LOOKUP = Hash[REG_LOOKUP.map { |k, v| [k.downcase.to_sym, v] }]
 
-    def self.register reg
+    def self.register(reg)
       return reg if ID_LOOKUP[reg]
       return SYM_LOOKUP[reg] if SYM_LOOKUP[reg]
-      if reg.respond_to? :upcase
-        return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID']
-      end
+      return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID'] if reg.respond_to? :upcase
+
       REG_LOOKUP['INVALID']
     end
-
   end
 end

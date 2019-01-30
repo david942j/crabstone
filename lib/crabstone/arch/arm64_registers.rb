@@ -9,6 +9,7 @@
 
 module Crabstone
   module ARM64
+    # rubocop:disable Style/MutableConstant
     REG_LOOKUP = {
       'INVALID' => 0,
       'X29' => 1,
@@ -271,6 +272,7 @@ module Crabstone
       'V30' => 258,
       'V31' => 259
     }
+    # rubocop:enable Style/MutableConstant
 
     ID_LOOKUP = REG_LOOKUP.invert
 
@@ -280,16 +282,14 @@ module Crabstone
     REG_LOOKUP['FP'] = REG_LOOKUP['X29']
     REG_LOOKUP['LR'] = REG_LOOKUP['X30']
 
-    SYM_LOOKUP = Hash[REG_LOOKUP.map {|k,v| [k.downcase.to_sym,v]}]
+    SYM_LOOKUP = Hash[REG_LOOKUP.map { |k, v| [k.downcase.to_sym, v] }]
 
-    def self.register reg
+    def self.register(reg)
       return reg if ID_LOOKUP[reg]
       return SYM_LOOKUP[reg] if SYM_LOOKUP[reg]
-      if reg.respond_to? :upcase
-        return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID']
-      end
+      return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID'] if reg.respond_to? :upcase
+
       REG_LOOKUP['INVALID']
     end
-
   end
 end

@@ -9,9 +9,8 @@
 
 module Crabstone
   module SysZ
-
     # Enums corresponding to SystemZ condition codes
-    
+
     CC_INVALID = 0
     CC_O = 1
     CC_H = 2
@@ -27,17 +26,17 @@ module Crabstone
     CC_LE = 12
     CC_NH = 13
     CC_NO = 14
-    
+
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
     OP_ACREG = 64
-    
+
     # SystemZ registers
-    
+
     REG_INVALID = 0
     REG_0 = 1
     REG_1 = 2
@@ -74,9 +73,9 @@ module Crabstone
     REG_F15 = 33
     REG_R0L = 34
     REG_ENDING = 35
-    
+
     # SystemZ instruction
-    
+
     INS_INVALID = 0
     INS_A = 1
     INS_ADB = 2
@@ -760,14 +759,14 @@ module Crabstone
     INS_XRK = 680
     INS_XY = 681
     INS_ENDING = 682
-    
+
     # Group of SystemZ instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
-    
+
     # Architecture-specific groups
     GRP_DISTINCTOPS = 128
     GRP_FPEXTENSION = 129

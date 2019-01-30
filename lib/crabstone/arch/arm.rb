@@ -9,7 +9,6 @@ require_relative 'arm_const'
 
 module Crabstone
   module ARM
-
     class OperandShift < FFI::Struct
       layout(
         :type, :uint,
@@ -47,9 +46,9 @@ module Crabstone
 
       def value
         case self[:type]
-        when *[OP_REG, OP_SYSREG]
+        when OP_REG, OP_SYSREG
           self[:value][:reg]
-        when *[OP_IMM, OP_CIMM, OP_PIMM]
+        when OP_IMM, OP_CIMM, OP_PIMM
           self[:value][:imm]
         when OP_MEM
           self[:value][:mem]
@@ -57,8 +56,6 @@ module Crabstone
           self[:value][:fp]
         when OP_SETEND
           self[:value][:setend]
-        else
-          nil
         end
       end
 
@@ -120,9 +117,8 @@ module Crabstone
       )
 
       def operands
-        self[:operands].take_while {|op| op[:type].nonzero?}
+        self[:operands].take_while { |op| op[:type].nonzero? }
       end
-
     end
   end
 end

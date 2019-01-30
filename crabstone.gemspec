@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'ffi' unless RUBY_PLATFORM =~ /java/
 
   spec.add_development_dependency 'rake', '~> 12'
-  spec.add_development_dependency 'test-unit'
+  spec.add_development_dependency 'rubocop', '~> 0.63'
 end
