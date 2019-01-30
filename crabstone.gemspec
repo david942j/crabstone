@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'rubocop', '~> 0.63'
+  spec.add_development_dependency 'versionomy', '~> 0.5'
 end

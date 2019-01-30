@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di

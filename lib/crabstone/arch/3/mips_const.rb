@@ -1,26 +1,22 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module MIPS
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
 
-    # MIPS registers
-
     REG_INVALID = 0
 
-    # General purpose registers
     REG_0 = 1
     REG_1 = 2
     REG_2 = 3
@@ -54,7 +50,6 @@ module Crabstone
     REG_30 = 31
     REG_31 = 32
 
-    # DSP registers
     REG_DSPCCOND = 33
     REG_DSPCARRY = 34
     REG_DSPEFI = 35
@@ -67,13 +62,11 @@ module Crabstone
     REG_DSPPOS = 42
     REG_DSPSCOUNT = 43
 
-    # ACC registers
     REG_AC0 = 44
     REG_AC1 = 45
     REG_AC2 = 46
     REG_AC3 = 47
 
-    # COP registers
     REG_CC0 = 48
     REG_CC1 = 49
     REG_CC2 = 50
@@ -83,7 +76,6 @@ module Crabstone
     REG_CC6 = 54
     REG_CC7 = 55
 
-    # FPU registers
     REG_F0 = 56
     REG_F1 = 57
     REG_F2 = 58
@@ -125,7 +117,6 @@ module Crabstone
     REG_FCC6 = 94
     REG_FCC7 = 95
 
-    # AFPR128
     REG_W0 = 96
     REG_W1 = 97
     REG_W2 = 98
@@ -208,8 +199,6 @@ module Crabstone
     REG_LO1 = REG_HI1
     REG_LO2 = REG_HI2
     REG_LO3 = REG_HI3
-
-    # MIPS instruction
 
     INS_INVALID = 0
     INS_ABSQ_S = 1
@@ -794,23 +783,17 @@ module Crabstone
     INS_XOR = 580
     INS_XORI = 581
 
-    # some alias instructions
     INS_NOP = 582
     INS_NEGU = 583
 
-    # special instructions
     INS_JALR_HB = 584
     INS_JR_HB = 585
     INS_ENDING = 586
 
-    # Group of MIPS instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
 
-    # Architecture-specific groups
     GRP_BITCOUNT = 128
     GRP_DSP = 129
     GRP_DSPR2 = 130

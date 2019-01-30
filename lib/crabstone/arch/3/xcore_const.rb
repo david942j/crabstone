@@ -1,22 +1,19 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module XCore
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-
-    # XCore registers
 
     REG_INVALID = 0
     REG_CP = 1
@@ -36,7 +33,6 @@ module Crabstone
     REG_R10 = 15
     REG_R11 = 16
 
-    # pseudo registers
     REG_PC = 17
     REG_SCP = 18
     REG_SSR = 19
@@ -47,8 +43,6 @@ module Crabstone
     REG_KSP = 24
     REG_ID = 25
     REG_ENDING = 26
-
-    # XCore instruction
 
     INS_INVALID = 0
     INS_ADD = 1
@@ -173,11 +167,8 @@ module Crabstone
     INS_ZEXT = 120
     INS_ENDING = 121
 
-    # Group of XCore instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
     GRP_ENDING = 2
   end

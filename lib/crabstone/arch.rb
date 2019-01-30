@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'crabstone/cs_version'
 
 # require all files under 'crabstone/arch/<cs_major_version>'

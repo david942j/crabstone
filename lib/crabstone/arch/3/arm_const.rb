@@ -1,16 +1,15 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module ARM
-    # ARM shift type
-
     SFT_INVALID = 0
     SFT_ASR = 1
     SFT_LSL = 2
@@ -22,8 +21,6 @@ module Crabstone
     SFT_LSR_REG = 8
     SFT_ROR_REG = 9
     SFT_RRX_REG = 10
-
-    # ARM condition code
 
     CC_INVALID = 0
     CC_EQ = 1
@@ -41,8 +38,6 @@ module Crabstone
     CC_GT = 13
     CC_LE = 14
     CC_AL = 15
-
-    # Special registers for MSR
 
     SYSREG_INVALID = 0
     SYSREG_SPSR_C = 1
@@ -77,9 +72,6 @@ module Crabstone
     SYSREG_FAULTMASK = 277
     SYSREG_CONTROL = 278
 
-    # The memory barrier constants map directly to the 4-bit encoding of
-    # the option field for Memory Barrier operations.
-
     MB_INVALID = 0
     MB_RESERVED_0 = 1
     MB_OSHLD = 2
@@ -98,8 +90,6 @@ module Crabstone
     MB_ST = 15
     MB_SY = 16
 
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
@@ -110,8 +100,6 @@ module Crabstone
     OP_SETEND = 66
     OP_SYSREG = 67
 
-    # Operand type for SETEND instruction
-
     SETEND_INVALID = 0
     SETEND_BE = 1
     SETEND_LE = 2
@@ -120,15 +108,11 @@ module Crabstone
     CPSMODE_IE = 2
     CPSMODE_ID = 3
 
-    # Operand type for SETEND instruction
-
     CPSFLAG_INVALID = 0
     CPSFLAG_F = 1
     CPSFLAG_I = 2
     CPSFLAG_A = 4
     CPSFLAG_NONE = 16
-
-    # Data type for elements of vector instructions.
 
     VECTORDATA_INVALID = 0
     VECTORDATA_I8 = 1
@@ -168,8 +152,6 @@ module Crabstone
     VECTORDATA_F64U16 = 35
     VECTORDATA_F32U16 = 36
     VECTORDATA_F64U32 = 37
-
-    # ARM registers
 
     REG_INVALID = 0
     REG_APSR = 1
@@ -284,7 +266,6 @@ module Crabstone
     REG_S31 = 110
     REG_ENDING = 111
 
-    # alias registers
     REG_R13 = REG_SP
     REG_R14 = REG_LR
     REG_R15 = REG_PC
@@ -292,8 +273,6 @@ module Crabstone
     REG_SL = REG_R10
     REG_FP = REG_R11
     REG_IP = REG_R12
-
-    # ARM instruction
 
     INS_INVALID = 0
     INS_ADC = 1
@@ -732,14 +711,10 @@ module Crabstone
     INS_VPOP = 434
     INS_ENDING = 435
 
-    # Group of ARM instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
 
-    # Architecture-specific groups
     GRP_CRYPTO = 128
     GRP_DATABARRIER = 129
     GRP_DIVIDE = 130

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'crabstone/arch'
 
 # TODO: This file will be an auto-genreated one.

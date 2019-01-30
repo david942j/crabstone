@@ -1,16 +1,15 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module SysZ
-    # Enums corresponding to SystemZ condition codes
-
     CC_INVALID = 0
     CC_O = 1
     CC_H = 2
@@ -27,15 +26,11 @@ module Crabstone
     CC_NH = 13
     CC_NO = 14
 
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
     OP_ACREG = 64
-
-    # SystemZ registers
 
     REG_INVALID = 0
     REG_0 = 1
@@ -73,8 +68,6 @@ module Crabstone
     REG_F15 = 33
     REG_R0L = 34
     REG_ENDING = 35
-
-    # SystemZ instruction
 
     INS_INVALID = 0
     INS_A = 1
@@ -760,14 +753,10 @@ module Crabstone
     INS_XY = 681
     INS_ENDING = 682
 
-    # Group of SystemZ instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
 
-    # Architecture-specific groups
     GRP_DISTINCTOPS = 128
     GRP_FPEXTENSION = 129
     GRP_HIGHWORD = 130

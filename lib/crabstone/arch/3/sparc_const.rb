@@ -1,19 +1,17 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module Sparc
-    # Enums corresponding to Sparc condition codes, both icc's and fcc's.
-
     CC_INVALID = 0
 
-    # Integer condition codes
     CC_ICC_A = 8 + 256
     CC_ICC_N = 0 + 256
     CC_ICC_NE = 9 + 256
@@ -31,7 +29,6 @@ module Crabstone
     CC_ICC_VC = 15 + 256
     CC_ICC_VS = 7 + 256
 
-    # Floating condition codes
     CC_FCC_A = 8 + 16 + 256
     CC_FCC_N = 0 + 16 + 256
     CC_FCC_U = 7 + 16 + 256
@@ -49,21 +46,15 @@ module Crabstone
     CC_FCC_ULE = 14 + 16 + 256
     CC_FCC_O = 15 + 16 + 256
 
-    # Branch hint
-
     HINT_INVALID = 0
     HINT_A = 1 << 0
     HINT_PT = 1 << 1
     HINT_PN = 1 << 2
 
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-
-    # SPARC registers
 
     REG_INVALID = 0
     REG_F0 = 1
@@ -156,8 +147,6 @@ module Crabstone
     REG_ENDING = 88
     REG_O6 = REG_SP
     REG_I6 = REG_FP
-
-    # SPARC instruction
 
     INS_INVALID = 0
     INS_ADDCC = 1
@@ -440,14 +429,10 @@ module Crabstone
     INS_RETL = 278
     INS_ENDING = 279
 
-    # Group of SPARC instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
 
-    # Architecture-specific groups
     GRP_HARDQUAD = 128
     GRP_V9 = 129
     GRP_VIS = 130

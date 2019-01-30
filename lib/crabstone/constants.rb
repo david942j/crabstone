@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: Auto-gerneate this file.
 # Constants in this file might be added in a newer Capstone version,
 # but I expect they are always backward compatible.

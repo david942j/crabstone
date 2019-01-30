@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Crabstone
   class ErrArch < StandardError; end
   class ErrCsh < StandardError; end

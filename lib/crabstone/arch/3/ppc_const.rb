@@ -1,16 +1,15 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module PPC
-    # PPC branch codes for some branch instructions
-
     BC_INVALID = 0
     BC_LT = (0 << 5) | 12
     BC_LE = (1 << 5) | 4
@@ -23,21 +22,9 @@ module Crabstone
     BC_SO = (4 << 5) | 12
     BC_NS = (4 << 5) | 4
 
-    # PPC branch hint for some branch instructions
-
     BH_INVALID = 0
     BH_PLUS = 1
     BH_MINUS = 2
-
-    # Operand type for instruction's operands
-
-    OP_INVALID = 0
-    OP_REG = 1
-    OP_IMM = 2
-    OP_MEM = 3
-    OP_CRX = 64
-
-    # PPC registers
 
     REG_INVALID = 0
     REG_CARRY = 1
@@ -219,7 +206,11 @@ module Crabstone
     REG_CR1EQ = 177
     REG_ENDING = 178
 
-    # PPC instruction
+    OP_INVALID = 0
+    OP_REG = 1
+    OP_IMM = 2
+    OP_MEM = 3
+    OP_CRX = 64
 
     INS_INVALID = 0
     INS_ADD = 1
@@ -1157,14 +1148,10 @@ module Crabstone
     INS_BDZFLRL = 933
     INS_ENDING = 934
 
-    # Group of PPC instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
 
-    # Architecture-specific groups
     GRP_ALTIVEC = 128
     GRP_MODE32 = 129
     GRP_MODE64 = 130

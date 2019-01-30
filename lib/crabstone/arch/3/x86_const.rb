@@ -1,16 +1,15 @@
+# frozen_string_literal: true
+
 # Library by Nguyen Anh Quynh
 # Original binding by Nguyen Anh Quynh and Tan Sheng Di
 # Additional binding work by Ben Nagy
+# Rewrite by david942j
 # (c) 2013 COSEINC. All Rights Reserved.
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-# Command: ./genconst /Users/ben/src/capstone/bindings/python/capstone/
-# 2015-05-02T13:24:01+12:00
 
 module Crabstone
   module X86
-    # X86 registers
-
     REG_INVALID = 0
     REG_AH = 1
     REG_AL = 2
@@ -247,23 +246,17 @@ module Crabstone
     REG_R15W = 233
     REG_ENDING = 234
 
-    # Operand type for instruction's operands
-
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
     OP_FP = 4
 
-    # AVX broadcast type
-
     AVX_BCAST_INVALID = 0
     AVX_BCAST_2 = 1
     AVX_BCAST_4 = 2
     AVX_BCAST_8 = 3
     AVX_BCAST_16 = 4
-
-    # SSE Code Condition type
 
     SSE_CC_INVALID = 0
     SSE_CC_EQ = 1
@@ -282,8 +275,6 @@ module Crabstone
     SSE_CC_GE = 14
     SSE_CC_GT = 15
     SSE_CC_TRUE = 16
-
-    # AVX Code Condition type
 
     AVX_CC_INVALID = 0
     AVX_CC_EQ = 1
@@ -319,15 +310,12 @@ module Crabstone
     AVX_CC_GT_OQ = 31
     AVX_CC_TRUE_US = 32
 
-    # AVX static rounding mode type
-
     AVX_RM_INVALID = 0
     AVX_RM_RN = 1
     AVX_RM_RD = 2
     AVX_RM_RU = 3
     AVX_RM_RZ = 4
 
-    # Instruction prefixes - to be used in cs_x86.prefix[]
     PREFIX_LOCK = 0xf0
     PREFIX_REP = 0xf3
     PREFIX_REPNE = 0xf2
@@ -339,8 +327,6 @@ module Crabstone
     PREFIX_GS = 0x65
     PREFIX_OPSIZE = 0x66
     PREFIX_ADDRSIZE = 0x67
-
-    # X86 instructions
 
     INS_INVALID = 0
     INS_AAA = 1
@@ -1639,18 +1625,14 @@ module Crabstone
     INS_XTEST = 1294
     INS_ENDING = 1295
 
-    # Group of X86 instructions
-
     GRP_INVALID = 0
 
-    # Generic groups
     GRP_JUMP = 1
     GRP_CALL = 2
     GRP_RET = 3
     GRP_INT = 4
     GRP_IRET = 5
 
-    # Architecture-specific groups
     GRP_VM = 128
     GRP_3DNOW = 129
     GRP_AES = 130
