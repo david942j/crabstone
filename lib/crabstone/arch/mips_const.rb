@@ -9,18 +9,17 @@
 
 module Crabstone
   module MIPS
-
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-    
+
     # MIPS registers
-    
+
     REG_INVALID = 0
-    
+
     # General purpose registers
     REG_0 = 1
     REG_1 = 2
@@ -54,7 +53,7 @@ module Crabstone
     REG_29 = 30
     REG_30 = 31
     REG_31 = 32
-    
+
     # DSP registers
     REG_DSPCCOND = 33
     REG_DSPCARRY = 34
@@ -67,13 +66,13 @@ module Crabstone
     REG_DSPOUTFLAG23 = 41
     REG_DSPPOS = 42
     REG_DSPSCOUNT = 43
-    
+
     # ACC registers
     REG_AC0 = 44
     REG_AC1 = 45
     REG_AC2 = 46
     REG_AC3 = 47
-    
+
     # COP registers
     REG_CC0 = 48
     REG_CC1 = 49
@@ -83,7 +82,7 @@ module Crabstone
     REG_CC5 = 53
     REG_CC6 = 54
     REG_CC7 = 55
-    
+
     # FPU registers
     REG_F0 = 56
     REG_F1 = 57
@@ -125,7 +124,7 @@ module Crabstone
     REG_FCC5 = 93
     REG_FCC6 = 94
     REG_FCC7 = 95
-    
+
     # AFPR128
     REG_W0 = 96
     REG_W1 = 97
@@ -209,9 +208,9 @@ module Crabstone
     REG_LO1 = REG_HI1
     REG_LO2 = REG_HI2
     REG_LO3 = REG_HI3
-    
+
     # MIPS instruction
-    
+
     INS_INVALID = 0
     INS_ABSQ_S = 1
     INS_ADD = 2
@@ -794,23 +793,23 @@ module Crabstone
     INS_WSBH = 579
     INS_XOR = 580
     INS_XORI = 581
-    
+
     # some alias instructions
     INS_NOP = 582
     INS_NEGU = 583
-    
+
     # special instructions
     INS_JALR_HB = 584
     INS_JR_HB = 585
     INS_ENDING = 586
-    
+
     # Group of MIPS instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
-    
+
     # Architecture-specific groups
     GRP_BITCOUNT = 128
     GRP_DSP = 129

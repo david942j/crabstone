@@ -9,18 +9,17 @@
 
 module Crabstone
   module ARM64
-
     # ARM64 shift type
-    
+
     SFT_INVALID = 0
     SFT_LSL = 1
     SFT_MSL = 2
     SFT_LSR = 3
     SFT_ASR = 4
     SFT_ROR = 5
-    
+
     # ARM64 extender type
-    
+
     EXT_INVALID = 0
     EXT_UXTB = 1
     EXT_UXTH = 2
@@ -30,9 +29,9 @@ module Crabstone
     EXT_SXTH = 6
     EXT_SXTW = 7
     EXT_SXTX = 8
-    
+
     # ARM64 condition code
-    
+
     CC_INVALID = 0
     CC_EQ = 1
     CC_NE = 2
@@ -50,11 +49,11 @@ module Crabstone
     CC_LE = 14
     CC_AL = 15
     CC_NV = 16
-    
+
     # System registers
-    
+
     # System registers for MRS
-    
+
     SYSREG_INVALID = 0
     SYSREG_MDCCSR_EL0 = 0x9808
     SYSREG_DBGDTRRX_EL0 = 0x9828
@@ -148,7 +147,7 @@ module Crabstone
     SYSREG_ICH_VTR_EL2 = 0xe659
     SYSREG_ICH_EISR_EL2 = 0xe65b
     SYSREG_ICH_ELSR_EL2 = 0xe65d
-    
+
     # System registers for MSR
     SYSREG_DBGDTRTX_EL0 = 0x9828
     SYSREG_OSLAR_EL1 = 0x8084
@@ -161,16 +160,16 @@ module Crabstone
     SYSREG_ICC_SGI1R_EL1 = 0xc65d
     SYSREG_ICC_ASGI1R_EL1 = 0xc65e
     SYSREG_ICC_SGI0R_EL1 = 0xc65f
-    
+
     # System PState Field (MSR instruction)
-    
+
     PSTATE_INVALID = 0
     PSTATE_SPSEL = 0x05
     PSTATE_DAIFSET = 0x1e
     PSTATE_DAIFCLR = 0x1f
-    
+
     # Vector arrangement specifier (for FloatingPoint/Advanced SIMD insn)
-    
+
     VAS_INVALID = 0
     VAS_8B = 1
     VAS_16B = 2
@@ -181,17 +180,17 @@ module Crabstone
     VAS_1D = 7
     VAS_2D = 8
     VAS_1Q = 9
-    
+
     # Vector element size specifier
-    
+
     VESS_INVALID = 0
     VESS_B = 1
     VESS_H = 2
     VESS_S = 3
     VESS_D = 4
-    
+
     # Memory barrier operands
-    
+
     BARRIER_INVALID = 0
     BARRIER_OSHLD = 0x1
     BARRIER_OSHST = 0x2
@@ -205,9 +204,9 @@ module Crabstone
     BARRIER_LD = 0xd
     BARRIER_ST = 0xe
     BARRIER_SY = 0xf
-    
+
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
@@ -220,9 +219,9 @@ module Crabstone
     OP_SYS = 68
     OP_PREFETCH = 69
     OP_BARRIER = 70
-    
+
     # TLBI operations
-    
+
     TLBI_INVALID = 0
     TLBI_VMALLE1IS = 1
     TLBI_VAE1IS = 2
@@ -256,7 +255,7 @@ module Crabstone
     TLBI_ALLE3 = 30
     TLBI_VAE3 = 31
     TLBI_VALE3 = 32
-    
+
     # AT operations
     AT_S1E1R = 33
     AT_S1E1W = 34
@@ -270,9 +269,9 @@ module Crabstone
     AT_S12E0W = 42
     AT_S1E3R = 43
     AT_S1E3W = 44
-    
+
     # DC operations
-    
+
     DC_INVALID = 0
     DC_ZVA = 1
     DC_IVAC = 2
@@ -282,38 +281,38 @@ module Crabstone
     DC_CVAU = 6
     DC_CIVAC = 7
     DC_CISW = 8
-    
+
     # IC operations
-    
+
     IC_INVALID = 0
     IC_IALLUIS = 1
     IC_IALLU = 2
     IC_IVAU = 3
-    
+
     # Prefetch operations (PRFM)
-    
+
     PRFM_INVALID = 0
-    PRFM_PLDL1KEEP = 0x00+1
-    PRFM_PLDL1STRM = 0x01+1
-    PRFM_PLDL2KEEP = 0x02+1
-    PRFM_PLDL2STRM = 0x03+1
-    PRFM_PLDL3KEEP = 0x04+1
-    PRFM_PLDL3STRM = 0x05+1
-    PRFM_PLIL1KEEP = 0x08+1
-    PRFM_PLIL1STRM = 0x09+1
-    PRFM_PLIL2KEEP = 0x0a+1
-    PRFM_PLIL2STRM = 0x0b+1
-    PRFM_PLIL3KEEP = 0x0c+1
-    PRFM_PLIL3STRM = 0x0d+1
-    PRFM_PSTL1KEEP = 0x10+1
-    PRFM_PSTL1STRM = 0x11+1
-    PRFM_PSTL2KEEP = 0x12+1
-    PRFM_PSTL2STRM = 0x13+1
-    PRFM_PSTL3KEEP = 0x14+1
-    PRFM_PSTL3STRM = 0x15+1
-    
+    PRFM_PLDL1KEEP = 0x00 + 1
+    PRFM_PLDL1STRM = 0x01 + 1
+    PRFM_PLDL2KEEP = 0x02 + 1
+    PRFM_PLDL2STRM = 0x03 + 1
+    PRFM_PLDL3KEEP = 0x04 + 1
+    PRFM_PLDL3STRM = 0x05 + 1
+    PRFM_PLIL1KEEP = 0x08 + 1
+    PRFM_PLIL1STRM = 0x09 + 1
+    PRFM_PLIL2KEEP = 0x0a + 1
+    PRFM_PLIL2STRM = 0x0b + 1
+    PRFM_PLIL3KEEP = 0x0c + 1
+    PRFM_PLIL3STRM = 0x0d + 1
+    PRFM_PSTL1KEEP = 0x10 + 1
+    PRFM_PSTL1STRM = 0x11 + 1
+    PRFM_PSTL2KEEP = 0x12 + 1
+    PRFM_PSTL2STRM = 0x13 + 1
+    PRFM_PSTL3KEEP = 0x14 + 1
+    PRFM_PSTL3STRM = 0x15 + 1
+
     # ARM64 registers
-    
+
     REG_INVALID = 0
     REG_X29 = 1
     REG_X30 = 2
@@ -575,15 +574,15 @@ module Crabstone
     REG_V30 = 258
     REG_V31 = 259
     REG_ENDING = 260
-    
+
     # alias registers
     REG_IP1 = REG_X16
     REG_IP0 = REG_X17
     REG_FP = REG_X29
     REG_LR = REG_X30
-    
+
     # ARM64 instruction
-    
+
     INS_INVALID = 0
     INS_ABS = 1
     INS_ADC = 2
@@ -1037,14 +1036,14 @@ module Crabstone
     INS_AT = 450
     INS_TLBI = 451
     INS_ENDING = 452
-    
+
     # Group of ARM64 instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
-    
+
     # Architecture-specific groups
     GRP_CRYPTO = 128
     GRP_FPARMV8 = 129

@@ -9,63 +9,62 @@
 
 module Crabstone
   module Sparc
-
     # Enums corresponding to Sparc condition codes, both icc's and fcc's.
-    
+
     CC_INVALID = 0
-    
+
     # Integer condition codes
-    CC_ICC_A = 8+256
-    CC_ICC_N = 0+256
-    CC_ICC_NE = 9+256
-    CC_ICC_E = 1+256
-    CC_ICC_G = 10+256
-    CC_ICC_LE = 2+256
-    CC_ICC_GE = 11+256
-    CC_ICC_L = 3+256
-    CC_ICC_GU = 12+256
-    CC_ICC_LEU = 4+256
-    CC_ICC_CC = 13+256
-    CC_ICC_CS = 5+256
-    CC_ICC_POS = 14+256
-    CC_ICC_NEG = 6+256
-    CC_ICC_VC = 15+256
-    CC_ICC_VS = 7+256
-    
+    CC_ICC_A = 8 + 256
+    CC_ICC_N = 0 + 256
+    CC_ICC_NE = 9 + 256
+    CC_ICC_E = 1 + 256
+    CC_ICC_G = 10 + 256
+    CC_ICC_LE = 2 + 256
+    CC_ICC_GE = 11 + 256
+    CC_ICC_L = 3 + 256
+    CC_ICC_GU = 12 + 256
+    CC_ICC_LEU = 4 + 256
+    CC_ICC_CC = 13 + 256
+    CC_ICC_CS = 5 + 256
+    CC_ICC_POS = 14 + 256
+    CC_ICC_NEG = 6 + 256
+    CC_ICC_VC = 15 + 256
+    CC_ICC_VS = 7 + 256
+
     # Floating condition codes
-    CC_FCC_A = 8+16+256
-    CC_FCC_N = 0+16+256
-    CC_FCC_U = 7+16+256
-    CC_FCC_G = 6+16+256
-    CC_FCC_UG = 5+16+256
-    CC_FCC_L = 4+16+256
-    CC_FCC_UL = 3+16+256
-    CC_FCC_LG = 2+16+256
-    CC_FCC_NE = 1+16+256
-    CC_FCC_E = 9+16+256
-    CC_FCC_UE = 10+16+256
-    CC_FCC_GE = 11+16+256
-    CC_FCC_UGE = 12+16+256
-    CC_FCC_LE = 13+16+256
-    CC_FCC_ULE = 14+16+256
-    CC_FCC_O = 15+16+256
-    
+    CC_FCC_A = 8 + 16 + 256
+    CC_FCC_N = 0 + 16 + 256
+    CC_FCC_U = 7 + 16 + 256
+    CC_FCC_G = 6 + 16 + 256
+    CC_FCC_UG = 5 + 16 + 256
+    CC_FCC_L = 4 + 16 + 256
+    CC_FCC_UL = 3 + 16 + 256
+    CC_FCC_LG = 2 + 16 + 256
+    CC_FCC_NE = 1 + 16 + 256
+    CC_FCC_E = 9 + 16 + 256
+    CC_FCC_UE = 10 + 16 + 256
+    CC_FCC_GE = 11 + 16 + 256
+    CC_FCC_UGE = 12 + 16 + 256
+    CC_FCC_LE = 13 + 16 + 256
+    CC_FCC_ULE = 14 + 16 + 256
+    CC_FCC_O = 15 + 16 + 256
+
     # Branch hint
-    
+
     HINT_INVALID = 0
-    HINT_A = 1<<0
-    HINT_PT = 1<<1
-    HINT_PN = 1<<2
-    
+    HINT_A = 1 << 0
+    HINT_PT = 1 << 1
+    HINT_PN = 1 << 2
+
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-    
+
     # SPARC registers
-    
+
     REG_INVALID = 0
     REG_F0 = 1
     REG_F1 = 2
@@ -157,9 +156,9 @@ module Crabstone
     REG_ENDING = 88
     REG_O6 = REG_SP
     REG_I6 = REG_FP
-    
+
     # SPARC instruction
-    
+
     INS_INVALID = 0
     INS_ADDCC = 1
     INS_ADDX = 2
@@ -440,14 +439,14 @@ module Crabstone
     INS_RET = 277
     INS_RETL = 278
     INS_ENDING = 279
-    
+
     # Group of SPARC instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
-    
+
     # Architecture-specific groups
     GRP_HARDQUAD = 128
     GRP_V9 = 129

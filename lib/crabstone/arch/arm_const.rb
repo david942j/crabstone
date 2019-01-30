@@ -9,9 +9,8 @@
 
 module Crabstone
   module ARM
-
     # ARM shift type
-    
+
     SFT_INVALID = 0
     SFT_ASR = 1
     SFT_LSL = 2
@@ -23,9 +22,9 @@ module Crabstone
     SFT_LSR_REG = 8
     SFT_ROR_REG = 9
     SFT_RRX_REG = 10
-    
+
     # ARM condition code
-    
+
     CC_INVALID = 0
     CC_EQ = 1
     CC_NE = 2
@@ -42,9 +41,9 @@ module Crabstone
     CC_GT = 13
     CC_LE = 14
     CC_AL = 15
-    
+
     # Special registers for MSR
-    
+
     SYSREG_INVALID = 0
     SYSREG_SPSR_C = 1
     SYSREG_SPSR_X = 2
@@ -77,10 +76,10 @@ module Crabstone
     SYSREG_BASEPRI_MAX = 276
     SYSREG_FAULTMASK = 277
     SYSREG_CONTROL = 278
-    
+
     # The memory barrier constants map directly to the 4-bit encoding of
     # the option field for Memory Barrier operations.
-    
+
     MB_INVALID = 0
     MB_RESERVED_0 = 1
     MB_OSHLD = 2
@@ -98,9 +97,9 @@ module Crabstone
     MB_LD = 14
     MB_ST = 15
     MB_SY = 16
-    
+
     # Operand type for instruction's operands
-    
+
     OP_INVALID = 0
     OP_REG = 1
     OP_IMM = 2
@@ -110,27 +109,27 @@ module Crabstone
     OP_PIMM = 65
     OP_SETEND = 66
     OP_SYSREG = 67
-    
+
     # Operand type for SETEND instruction
-    
+
     SETEND_INVALID = 0
     SETEND_BE = 1
     SETEND_LE = 2
-    
+
     CPSMODE_INVALID = 0
     CPSMODE_IE = 2
     CPSMODE_ID = 3
-    
+
     # Operand type for SETEND instruction
-    
+
     CPSFLAG_INVALID = 0
     CPSFLAG_F = 1
     CPSFLAG_I = 2
     CPSFLAG_A = 4
     CPSFLAG_NONE = 16
-    
+
     # Data type for elements of vector instructions.
-    
+
     VECTORDATA_INVALID = 0
     VECTORDATA_I8 = 1
     VECTORDATA_I16 = 2
@@ -169,9 +168,9 @@ module Crabstone
     VECTORDATA_F64U16 = 35
     VECTORDATA_F32U16 = 36
     VECTORDATA_F64U32 = 37
-    
+
     # ARM registers
-    
+
     REG_INVALID = 0
     REG_APSR = 1
     REG_APSR_NZCV = 2
@@ -284,7 +283,7 @@ module Crabstone
     REG_S30 = 109
     REG_S31 = 110
     REG_ENDING = 111
-    
+
     # alias registers
     REG_R13 = REG_SP
     REG_R14 = REG_LR
@@ -293,9 +292,9 @@ module Crabstone
     REG_SL = REG_R10
     REG_FP = REG_R11
     REG_IP = REG_R12
-    
+
     # ARM instruction
-    
+
     INS_INVALID = 0
     INS_ADC = 1
     INS_ADD = 2
@@ -732,14 +731,14 @@ module Crabstone
     INS_VPUSH = 433
     INS_VPOP = 434
     INS_ENDING = 435
-    
+
     # Group of ARM instructions
-    
+
     GRP_INVALID = 0
-    
+
     # Generic groups
     GRP_JUMP = 1
-    
+
     # Architecture-specific groups
     GRP_CRYPTO = 128
     GRP_DATABARRIER = 129

@@ -9,8 +9,7 @@ require 'crabstone'
 require 'stringio'
 
 module TestPPC
-
-  PPC_CODE = "\x43\x20\x0c\x07\x41\x56\xff\x17\x80\x20\x00\x00\x80\x3f\x00\x00\x10\x43\x23\x0e\xd0\x44\x00\x80\x4c\x43\x22\x02\x2d\x03\x00\x80\x7c\x43\x20\x14\x7c\x43\x20\x93\x4f\x20\x00\x21\x4c\xc8\x00\x21\x40\x82\x00\x14"
+  PPC_CODE = "\x43\x20\x0c\x07\x41\x56\xff\x17\x80\x20\x00\x00\x80\x3f\x00\x00\x10\x43\x23\x0e\xd0\x44\x00\x80\x4c\x43\x22\x02\x2d\x03\x00\x80\x7c\x43\x20\x14\x7c\x43\x20\x93\x4f\x20\x00\x21\x4c\xc8\x00\x21\x40\x82\x00\x14".freeze
   include Crabstone
   include Crabstone::PPC
 
@@ -19,106 +18,96 @@ module TestPPC
       'arch' => ARCH_PPC,
       'mode' => MODE_BIG_ENDIAN,
       'code' => PPC_CODE,
-      'comment' => "PPC-64"
+      'comment' => 'PPC-64'
     ]
   ]
 
-  def self.uint32 i
+  def self.uint32(i)
     Integer(i) & 0xffffffff
   end
 
-  def self.bc_name bc
+  def self.bc_name(bc)
     case bc
     when BC_INVALID
-      "invalid"
+      'invalid'
     when BC_LT
-      "lt"
+      'lt'
     when BC_LE
-      "le"
+      'le'
     when BC_EQ
-      "eq"
+      'eq'
     when BC_GE
-      "ge"
+      'ge'
     when BC_GT
-      "gt"
+      'gt'
     when BC_NE
-      "ne"
+      'ne'
     when BC_UN
-      "un"
+      'un'
     when BC_NU
-      "nu"
+      'nu'
     when BC_SO
-      "so"
+      'so'
     when BC_NS
-      "ns"
+      'ns'
     end
   end
 
-  def self.print_detail cs, insn, sio
+  def self.print_detail(cs, insn, sio)
     if insn.op_count > 0
-      if insn.writes_reg? :ra
-        print "[w:ra] "
-      end
+      print '[w:ra] ' if insn.writes_reg? :ra
       sio.puts "\top_count: #{insn.op_count}"
-      insn.operands.each_with_index do |op,idx|
+      insn.operands.each_with_index do |op, idx|
         case op[:type]
         when OP_REG
           sio.puts "\t\toperands[#{idx}].type: REG = #{cs.reg_name(op.value)}"
         when OP_IMM
-          sio.puts "\t\toperands[#{idx}].type: IMM = 0x#{self.uint32(op.value).to_s(16)}"
+          sio.puts "\t\toperands[#{idx}].type: IMM = 0x#{uint32(op.value).to_s(16)}"
         when OP_MEM
           sio.puts "\t\toperands[#{idx}].type: MEM"
           if op.value[:base].nonzero?
-            sio.puts "\t\t\toperands[#{idx}].mem.base: REG = %s" % cs.reg_name(op.value[:base])
+            sio.puts format("\t\t\toperands[#{idx}].mem.base: REG = %s", cs.reg_name(op.value[:base]))
           end
-          if op.value[:disp].nonzero?
-            sio.puts "\t\t\toperands[#{idx}].mem.disp: 0x%x" % (self.uint32(op.value[:disp]))
-          end
+          sio.puts format("\t\t\toperands[#{idx}].mem.disp: 0x%x", uint32(op.value[:disp])) if op.value[:disp].nonzero?
         when OP_CRX
           sio.puts "\t\toperands[#{idx}].type: CRX\n"
           sio.puts "\t\t\toperands[#{idx}].crx.scale: #{op.value[:scale]}"
-          sio.puts "\t\t\toperands[#{idx}].crx.reg: %s" % (cs.reg_name(op.value[:reg]))
-          sio.puts "\t\t\toperands[#{idx}].crx.cond: %s" % (self.bc_name(op.value[:cond]))
+          sio.puts format("\t\t\toperands[#{idx}].crx.reg: %s", cs.reg_name(op.value[:reg]))
+          sio.puts format("\t\t\toperands[#{idx}].crx.cond: %s", bc_name(op.value[:cond]))
         end
       end
     end
-    if insn.bc.nonzero?
-      sio.puts("\tBranch code: %u" % insn.bc)
-    end
-    if insn.bh.nonzero?
-      sio.puts("\tBranch hint: %u" % insn.bh)
-    end
-    if insn.update_cr0
-      sio.puts("\tUpdate-CR0: True")
-    end
+    sio.puts(format("\tBranch code: %u", insn.bc)) if insn.bc.nonzero?
+    sio.puts(format("\tBranch hint: %u", insn.bh)) if insn.bh.nonzero?
+    sio.puts("\tUpdate-CR0: True") if insn.update_cr0
     sio.puts
   end
 
   ours = StringIO.new
 
   begin
-    cs    = Disassembler.new(0,0)
+    cs = Disassembler.new(0, 0)
     print "PPC Test: Capstone v #{cs.version.join('.')} - "
   ensure
     cs.close
   end
 
-  #Test through all modes and architectures
+  # Test through all modes and architectures
   @platforms.each do |p|
-    ours.puts "****************"
+    ours.puts '****************'
     ours.puts "Platform: #{p['comment']}"
-    ours.puts "Code:#{p['code'].bytes.map {|b| "0x%.2x" % b}.join(' ')} "
-    ours.puts "Disasm:"
+    ours.puts "Code:#{p['code'].bytes.map { |b| format('0x%.2x', b) }.join(' ')} "
+    ours.puts 'Disasm:'
 
-    cs    = Disassembler.new(p['arch'], p['mode'])
+    cs = Disassembler.new(p['arch'], p['mode'])
     cs.decomposer = true
     cache = nil
 
-    cs.disasm(p['code'], 0x1000).each {|insn|
+    cs.disasm(p['code'], 0x1000).each do |insn|
       ours.puts "0x#{insn.address.to_s(16)}:\t#{insn.mnemonic}\t#{insn.op_str}"
-      self.print_detail(cs, insn, ours)
+      print_detail(cs, insn, ours)
       cache = insn.address + insn.size
-    }
+    end
 
     ours.printf("0x%x:\n", cache)
     ours.puts
@@ -126,7 +115,7 @@ module TestPPC
   end
 
   ours.rewind
-  theirs = File.binread(__FILE__ + ".SPEC")
+  theirs = File.binread(__FILE__ + '.SPEC')
   if ours.read == theirs
     puts "#{__FILE__}: PASS"
   else

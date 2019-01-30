@@ -9,7 +9,6 @@ require 'crabstone'
 require 'stringio'
 
 module Test
-
   include Crabstone
 
   # These need to be maintained by hand, but I actually just copy them over
@@ -57,27 +56,28 @@ module Test
       reg_max: 26,
       ins_max: 121,
       grp_max: 2
-    ],
+    ]
   }
 
   begin
-    cs    = Disassembler.new(0,0)
+    cs = Disassembler.new(0, 0)
     print "Sanity Check: Capstone v #{cs.version.join('.')}\n"
   ensure
-    cs.close rescue nil
+    begin
+      cs.close
+    rescue StandardError
+      nil
+    end
   end
 
-  #Test through all modes and architectures
+  # Test through all modes and architectures
   @checks.each do |klass, checklist|
     if klass::REG_ENDING != checklist[:reg_max] ||
-        klass::INS_ENDING != checklist[:ins_max] ||
-        klass::GRP_ENDING != checklist[:grp_max]
+       klass::INS_ENDING != checklist[:ins_max] ||
+       klass::GRP_ENDING != checklist[:grp_max]
       puts "\t#{__FILE__}: #{klass}: FAIL"
     else
       puts "\t#{__FILE__}: #{klass}: PASS"
     end
-
   end
-
-
 end

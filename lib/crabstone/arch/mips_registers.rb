@@ -9,6 +9,7 @@
 
 module Crabstone
   module MIPS
+    # rubocop:disable Style/MutableConstant
     REG_LOOKUP = {
       'INVALID' => 0,
       '0' => 1,
@@ -147,6 +148,7 @@ module Crabstone
       'MPL1' => 134,
       'MPL2' => 135
     }
+    # rubocop:enable Style/MutableConstant
 
     ID_LOOKUP = REG_LOOKUP.invert
 
@@ -193,16 +195,14 @@ module Crabstone
     REG_LOOKUP['LO2'] = REG_LOOKUP['HI2']
     REG_LOOKUP['LO3'] = REG_LOOKUP['HI3']
 
-    SYM_LOOKUP = Hash[REG_LOOKUP.map {|k,v| [k.downcase.to_sym,v]}]
+    SYM_LOOKUP = Hash[REG_LOOKUP.map { |k, v| [k.downcase.to_sym, v] }]
 
-    def self.register reg
+    def self.register(reg)
       return reg if ID_LOOKUP[reg]
       return SYM_LOOKUP[reg] if SYM_LOOKUP[reg]
-      if reg.respond_to? :upcase
-        return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID']
-      end
+      return REG_LOOKUP[reg.upcase] || REG_LOOKUP['INVALID'] if reg.respond_to? :upcase
+
       REG_LOOKUP['INVALID']
     end
-
   end
 end

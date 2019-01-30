@@ -1,0 +1,28 @@
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 120
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/Documentation: # TODO: enable this cop
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
