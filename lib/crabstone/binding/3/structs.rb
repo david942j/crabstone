@@ -3,9 +3,6 @@ require 'crabstone/arch'
 # TODO: This file will be an auto-genreated one.
 module Crabstone
   module Binding
-    extend FFI::Library
-    ffi_lib ['capstone', 'libcapstone.so.3']
-
     # This is because JRuby FFI on x64 Windows thinks size_t is 32 bit
     case FFI::Platform::ADDRESS_SIZE
     when 64

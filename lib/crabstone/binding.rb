@@ -1,8 +1,8 @@
-require 'crabstone/binding/structs'
+require 'crabstone/cs_version'
 require 'crabstone/constants'
 
-# TODO: This file should require proper files according to the
-# return value of cs_version.
+Crabstone.version_require 'crabstone/binding/%v/structs'
+
 module Crabstone
   module Binding
     class Instruction < FFI::ManagedStruct
@@ -32,7 +32,8 @@ module Crabstone
     attach_function :cs_reg_write, [:csh, Instruction, :uint], :bool
     attach_function :cs_strerror, [:cs_err], :string
     attach_function :cs_support, [:cs_arch], :bool
-    attach_function :cs_version, %i[pointer pointer], :uint
+    # Already defined in cs_version.rb
+    # attach_function :cs_version, %i[pointer pointer], :uint
     attach_function :memcpy, %i[pointer pointer size_t], :pointer
     attach_function :malloc, [:size_t], :pointer
     attach_function :free, [:pointer], :void
