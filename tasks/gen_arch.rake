@@ -13,10 +13,11 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
   def glob(pattern, &block)
     Dir.glob(File.join(@cs_path, pattern), &block)
   end
-  # We have three kinds of files to be generated:
+  # We have two kinds of files to be generated:
   # 1. <arch>.rb, which defines the structure of <arch>_insn.
   # 2. <arch>_const.rb, defines constants in the architecture.
-  # 3. <arch>_registers.rb, defines all registers' name in the arch.
+
+  def gen_arch; end
 
   # Simply use values generated under capstone/bindings/python.
   def gen_const
@@ -26,14 +27,12 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
         next '' if line.strip.start_with?('#')
 
         line.strip.empty? ? "\n" : ' ' * 4 + line.gsub("#{arch.upcase}_", '')
-      end.join.gsub(/\n{3,}/, "\n\n") # Remove more than two empty lines
+      end.join
+      res.gsub!(/\n{3,}/, "\n\n") # Remove more than two empty lines
+      res << "\n    extend Register"
       write_file("#{arch}_const.rb", module_name(arch), res.strip)
     end
   end
-
-  def gen_arch; end
-
-  def gen_reg; end
 
   def header
     <<~HEADER
@@ -50,8 +49,11 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
   end
 
   def write_file(filename, mod, res)
+    puts "Writing #{filename}"
     IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
       #{header}
+      require 'crabstone/arch/register'
+
       module Crabstone
         module #{mod}
           #{res}
@@ -79,6 +81,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
 
   gen_arch
   gen_const
-  gen_reg
   write_dotversion
+
+  Rake::Task['rubocop:auto_correct'].invoke
 end

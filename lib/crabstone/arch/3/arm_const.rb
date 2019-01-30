@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module ARM
     SFT_INVALID = 0
@@ -747,5 +749,7 @@ module Crabstone
     GRP_DPVFP = 157
     GRP_V6M = 158
     GRP_ENDING = 159
+
+    extend Register
   end
 end

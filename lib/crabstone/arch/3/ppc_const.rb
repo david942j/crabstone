@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module PPC
     BC_INVALID = 0
@@ -1163,5 +1165,7 @@ module Crabstone
     GRP_PPC4XX = 136
     GRP_PPC6XX = 137
     GRP_ENDING = 138
+
+    extend Register
   end
 end

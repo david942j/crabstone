@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module MIPS
     OP_INVALID = 0
@@ -828,5 +830,7 @@ module Crabstone
     GRP_GP32BIT = 159
     GRP_GP64BIT = 160
     GRP_ENDING = 161
+
+    extend Register
   end
 end

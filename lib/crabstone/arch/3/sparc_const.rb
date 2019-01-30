@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module Sparc
     CC_INVALID = 0
@@ -441,5 +443,7 @@ module Crabstone
     GRP_32BIT = 133
     GRP_64BIT = 134
     GRP_ENDING = 135
+
+    extend Register
   end
 end

@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module XCore
     OP_INVALID = 0
@@ -171,5 +173,7 @@ module Crabstone
 
     GRP_JUMP = 1
     GRP_ENDING = 2
+
+    extend Register
   end
 end

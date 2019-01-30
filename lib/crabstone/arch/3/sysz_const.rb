@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module SysZ
     CC_INVALID = 0
@@ -763,5 +765,7 @@ module Crabstone
     GRP_INTERLOCKEDACCESS1 = 131
     GRP_LOADSTOREONCOND = 132
     GRP_ENDING = 133
+
+    extend Register
   end
 end

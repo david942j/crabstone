@@ -8,6 +8,8 @@
 
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
+require 'crabstone/arch/register'
+
 module Crabstone
   module X86
     REG_INVALID = 0
@@ -1675,5 +1677,7 @@ module Crabstone
     GRP_SMAP = 167
     GRP_NOVLX = 168
     GRP_ENDING = 169
+
+    extend Register
   end
 end
