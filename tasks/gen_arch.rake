@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 require 'versionomy'
 
-desc 'To auto-generate files under lib/crabstone/arch'
+desc 'To auto-generate files under lib/crabstone/arch/'
 task :gen_arch, :path_to_capstone, :version do |_t, args|
   next if ENV['CI']
 
   @cs_path = File.expand_path(args.path_to_capstone)
   @version = Versionomy.parse(args.version)
   @target_dir = File.join(__dir__, '..', 'lib', 'crabstone', 'arch', @version.major.to_s)
+
+  FileUtils.mkdir_p(@target_dir)
 
   def glob(pattern, &block)
     Dir.glob(File.join(@cs_path, pattern), &block)
@@ -17,6 +21,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
   # 1. <arch>.rb, which defines the structure of <arch>_insn.
   # 2. <arch>_const.rb, defines constants in the architecture.
 
+  # TODO: This is hard..
   def gen_arch; end
 
   # Simply use values generated under capstone/bindings/python.

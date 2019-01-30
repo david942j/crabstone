@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'crabstone/constants'
-require 'crabstone/cs_version'
-Crabstone.version_require 'crabstone/binding/%v/structs'
+require 'crabstone/binding/structs'
 
 module Crabstone
   module Binding
