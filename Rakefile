@@ -11,7 +11,7 @@ Rake::TestTask.new do |t|
 end
 
 RuboCop::RakeTask.new(:rubocop) do |task|
-  task.patterns = ['lib/**/*.rb', 'examples/*.rb', 'tasks/**/*.rake']
+  task.patterns = ['lib/**/*.rb', 'examples/*.rb', 'tasks/**/*.{rake,rb}']
 end
 
 task default: %i[rubocop test]
