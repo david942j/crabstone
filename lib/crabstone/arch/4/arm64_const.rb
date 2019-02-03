@@ -134,7 +134,6 @@ module Crabstone
     SYSREG_ICH_VTR_EL2 = 0xe659
     SYSREG_ICH_EISR_EL2 = 0xe65b
     SYSREG_ICH_ELSR_EL2 = 0xe65d
-
     SYSREG_DBGDTRTX_EL0 = 0x9828
     SYSREG_OSLAR_EL1 = 0x8084
     SYSREG_PMSWINC_EL0 = 0xdce4
@@ -229,7 +228,6 @@ module Crabstone
     TLBI_ALLE3 = 30
     TLBI_VAE3 = 31
     TLBI_VALE3 = 32
-
     AT_S1E1R = 33
     AT_S1E1W = 34
     AT_S1E0R = 35
@@ -539,7 +537,6 @@ module Crabstone
     REG_V30 = 258
     REG_V31 = 259
     REG_ENDING = 260
-
     REG_IP0 = REG_X16
     REG_IP1 = REG_X17
     REG_FP = REG_X29
@@ -997,12 +994,17 @@ module Crabstone
     INS_DC = 449
     INS_AT = 450
     INS_TLBI = 451
-    INS_ENDING = 452
+    INS_NEGS = 452
+    INS_NGCS = 453
+    INS_ENDING = 454
 
     GRP_INVALID = 0
-
     GRP_JUMP = 1
-
+    GRP_CALL = 2
+    GRP_RET = 3
+    GRP_INT = 4
+    GRP_PRIVILEGE = 6
+    GRP_BRANCH_RELATIVE = 7
     GRP_CRYPTO = 128
     GRP_FPARMV8 = 129
     GRP_NEON = 130

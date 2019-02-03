@@ -43,12 +43,6 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
     <<~HEADER
       # frozen_string_literal: true
 
-      # Library by Nguyen Anh Quynh
-      # Original binding by Nguyen Anh Quynh and Tan Sheng Di
-      # Additional binding work by Ben Nagy
-      # Rewrite by david942j
-      # (c) 2013 COSEINC. All Rights Reserved.
-
       # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
     HEADER
   end
@@ -65,12 +59,6 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
         end
       end
     TEMPLATE
-  end
-
-  def write_dotversion
-    File.open(File.join(@target_dir, '.version'), 'w') do |f|
-      f.puts @version
-    end
   end
 
   gen_arch

@@ -20,6 +20,12 @@ module Helper
     Dir.glob(File.join(@cs_path, pattern), &block)
   end
 
+  def write_dotversion
+    File.open(File.join(@target_dir, '.version'), 'w') do |f|
+      f.puts @version
+    end
+  end
+
   class HParser
     attr_accessor :include_path, :file
     attr_reader :code

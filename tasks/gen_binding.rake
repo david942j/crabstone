@@ -76,19 +76,13 @@ task :gen_binding, :path_to_capstone, :version do |_t, args|
   def parser
     Helper::HParser.new do |config|
       config.include_path << File.join(@cs_path, 'include')
-      config.file = File.join(@cs_path, 'include', 'capstone.h')
+      config.file = File.join(@cs_path, 'include', @version.major >= 4 ? 'capstone' : '', 'capstone.h')
     end
   end
 
   def write_file(filename, content)
     puts "Writing #{filename}"
     IO.binwrite(File.join(@target_dir, filename), content)
-  end
-
-  def write_dotversion
-    File.open(File.join(@target_dir, '.version'), 'w') do |f|
-      f.puts @version
-    end
   end
 
   gen_detail

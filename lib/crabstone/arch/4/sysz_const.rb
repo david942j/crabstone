@@ -750,9 +750,7 @@ module Crabstone
     INS_ENDING = 682
 
     GRP_INVALID = 0
-
     GRP_JUMP = 1
-
     GRP_DISTINCTOPS = 128
     GRP_FPEXTENSION = 129
     GRP_HIGHWORD = 130

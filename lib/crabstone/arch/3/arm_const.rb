@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# Rewrite by david942j
-# (c) 2013 COSEINC. All Rights Reserved.
-
 # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'crabstone/arch/register'

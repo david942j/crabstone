@@ -109,8 +109,8 @@ module TestX86
           sio.puts "\t\toperands[#{c}].type: REG = #{cs.reg_name(op.value)}"
         elsif op.imm?
           sio.puts "\t\toperands[#{c}].type: IMM = 0x#{uint64(op.value).to_s(16)}"
-        elsif op.fp?
-          sio.puts "\t\toperands[#{c}].type: FP = 0x#{uint32(op.value)}"
+        # elsif op.fp?
+          # sio.puts "\t\toperands[#{c}].type: FP = 0x#{uint32(op.value)}"
         elsif op.mem?
           sio.puts "\t\toperands[#{c}].type: MEM"
           if op.value[:segment].nonzero?

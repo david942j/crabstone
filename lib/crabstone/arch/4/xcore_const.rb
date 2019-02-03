@@ -28,7 +28,6 @@ module Crabstone
     REG_R9 = 14
     REG_R10 = 15
     REG_R11 = 16
-
     REG_PC = 17
     REG_SCP = 18
     REG_SSR = 19
@@ -164,7 +163,6 @@ module Crabstone
     INS_ENDING = 121
 
     GRP_INVALID = 0
-
     GRP_JUMP = 1
     GRP_ENDING = 2
 

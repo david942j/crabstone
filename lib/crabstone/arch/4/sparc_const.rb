@@ -7,7 +7,6 @@ require 'crabstone/arch/register'
 module Crabstone
   module Sparc
     CC_INVALID = 0
-
     CC_ICC_A = 8 + 256
     CC_ICC_N = 0 + 256
     CC_ICC_NE = 9 + 256
@@ -24,7 +23,6 @@ module Crabstone
     CC_ICC_NEG = 6 + 256
     CC_ICC_VC = 15 + 256
     CC_ICC_VS = 7 + 256
-
     CC_FCC_A = 8 + 16 + 256
     CC_FCC_N = 0 + 16 + 256
     CC_FCC_U = 7 + 16 + 256
@@ -426,9 +424,7 @@ module Crabstone
     INS_ENDING = 279
 
     GRP_INVALID = 0
-
     GRP_JUMP = 1
-
     GRP_HARDQUAD = 128
     GRP_V9 = 129
     GRP_VIS = 130
