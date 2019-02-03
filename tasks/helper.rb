@@ -1,7 +1,25 @@
 # frozen_string_literal: true
 
+# Only for tasks/*.rake to use.
 # @private
 module Helper
+  module_function
+
+  def module_name(arch)
+    # it's hard to change arch into the camel-case module name,
+    # so we simply use upcase and fixup some cases.
+    case arch
+    when 'sparc' then 'Sparc'
+    when 'sysz' then 'SysZ'
+    when 'xcore' then 'XCore'
+    else arch.upcase
+    end
+  end
+
+  def glob(pattern, &block)
+    Dir.glob(File.join(@cs_path, pattern), &block)
+  end
+
   class HParser
     attr_accessor :include_path, :file
     attr_reader :code
@@ -66,6 +84,8 @@ module Helper
     end
 
     class Struct
+      attr_reader :fields
+
       def initialize
         @fields = []
       end
@@ -121,7 +141,7 @@ module Helper
         end
       end
 
-      attr_reader :name
+      attr_reader :name, :type
 
       def initialize(var, type, ref_c)
         @name, @nmemb = var

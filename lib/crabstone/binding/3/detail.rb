@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
+
 require 'ffi'
 
 require 'crabstone/arch'
@@ -11,10 +13,10 @@ module Crabstone
         :arm, ARM::Instruction,
         :arm64, ARM64::Instruction,
         :mips, MIPS::Instruction,
-        :x86, X86::Instruction,
         :ppc, PPC::Instruction,
         :sparc, Sparc::Instruction,
         :sysz, SysZ::Instruction,
+        :x86, X86::Instruction,
         :xcore, XCore::Instruction
       )
     end

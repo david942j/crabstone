@@ -4,6 +4,8 @@ require 'fileutils'
 
 require 'versionomy'
 
+require_relative 'helper'
+
 desc 'To auto-generate files under lib/crabstone/arch/'
 task :gen_arch, :path_to_capstone, :version do |_t, args|
   next if ENV['CI']
@@ -11,12 +13,10 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
   @cs_path = File.expand_path(args.path_to_capstone)
   @version = Versionomy.parse(args.version)
   @target_dir = File.join(__dir__, '..', 'lib', 'crabstone', 'arch', @version.major.to_s)
+  include Helper
 
   FileUtils.mkdir_p(@target_dir)
 
-  def glob(pattern, &block)
-    Dir.glob(File.join(@cs_path, pattern), &block)
-  end
   # We have two kinds of files to be generated:
   # 1. <arch>.rb, which defines the structure of <arch>_insn.
   # 2. <arch>_const.rb, defines constants in the architecture.
@@ -65,17 +65,6 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
         end
       end
     TEMPLATE
-  end
-
-  def module_name(arch)
-    # it's hard to change arch into the camel-case module name,
-    # so we simply use upcase and fixup some cases.
-    case arch
-    when 'sparc' then 'Sparc'
-    when 'sysz' then 'SysZ'
-    when 'xcore' then 'XCore'
-    else arch.upcase
-    end
   end
 
   def write_dotversion
