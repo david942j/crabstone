@@ -32,13 +32,11 @@ module Crabstone
         raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
       end
 
-      @arch    = arch
-      @mode    = mode
-      p_size_t = FFI::MemoryPointer.new :ulong_long
-      @p_csh = FFI::MemoryPointer.new p_size_t
-      if (res = Binding.cs_open(arch, mode, @p_csh)).nonzero?
-        Crabstone.raise_errno res
-      end
+      @arch = arch
+      @mode = mode
+      p_size_t = FFI::MemoryPointer.new(:ulong_long)
+      @p_csh = FFI::MemoryPointer.new(p_size_t)
+      safe { Binding.cs_open(arch, mode, @p_csh) }
 
       @csh = @p_csh.read_ulong_long
     end
@@ -48,8 +46,7 @@ module Crabstone
     #
     # @return [void]
     def close
-      res = Binding.cs_close(@p_csh)
-      Crabstone.raise_errno(res) unless res.zero?
+      safe { Binding.cs_close(@p_csh) }
     end
 
     def syntax=(new_stx)
@@ -133,8 +130,7 @@ module Crabstone
     end
 
     def set_raw_option(opt, val)
-      res = Binding.cs_option(csh, opt, val)
-      Crabstone.raise_errno(res) if res.nonzero?
+      safe { Binding.cs_option(csh, opt, val) }
     end
 
     private
@@ -150,6 +146,10 @@ module Crabstone
         Binding.memcpy(cs_insn_ptr, insn_ptr.read_pointer + i * insn_sz, insn_sz)
         Crabstone::Instruction.new(@csh, Binding::Instruction.new(cs_insn_ptr), @arch)
       end
+    end
+
+    def safe
+      yield.tap { |res| Crabstone.raise_errno(res) unless res.zero? }
     end
   end
 end

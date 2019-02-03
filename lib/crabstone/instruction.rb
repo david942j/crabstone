@@ -15,7 +15,7 @@ module Crabstone
       sparc: ARCH_SPARC,
       sysz: ARCH_SYSZ,
       xcore: ARCH_XCORE
-    }.invert
+    }.invert.freeze
 
     ARCH_CLASSES = {
       ARCH_ARM => ARM,
@@ -145,13 +145,13 @@ module Crabstone
       end
     end
 
-    def respond_to_missing?(meth)
+    def respond_to_missing?(meth, include_private = true)
       return true if raw_insn.members.include?(meth)
-      return false unless detailed?
+      return super unless detailed?
       return true if @arch_insn.respond_to?(meth)
       return true if @arch_insn.members.include?(meth)
 
-      false
+      super
     end
 
     private

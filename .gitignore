@@ -1,5 +1,4 @@
-*.gem
-*.swp
-*.sublime-workspace
-.DS_Store
+/pkg/
+/coverage/
+
 Gemfile.lock
