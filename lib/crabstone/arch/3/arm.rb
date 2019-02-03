@@ -47,16 +47,15 @@ module Crabstone
       )
 
       def value
-        case self[:type]
-        when OP_REG, OP_SYSREG
+        if reg?
           self[:value][:reg]
-        when OP_IMM, OP_CIMM, OP_PIMM
+        elsif imm?
           self[:value][:imm]
-        when OP_MEM
+        elsif mem?
           self[:value][:mem]
-        when OP_FP
+        elsif fp?
           self[:value][:fp]
-        when OP_SETEND
+        elsif setend?
           self[:value][:setend]
         end
       end
@@ -87,6 +86,10 @@ module Crabstone
 
       def sysreg?
         self[:type] == OP_SYSREG
+      end
+
+      def setend?
+        self[:type] == OP_SETEND
       end
 
       def valid?

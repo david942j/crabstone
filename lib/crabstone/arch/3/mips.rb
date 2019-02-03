@@ -33,15 +33,12 @@ module Crabstone
       )
 
       def value
-        case self[:type]
-        when OP_REG
+        if reg?
           self[:value][:reg]
-        when OP_IMM
+        elsif imm?
           self[:value][:imm]
-        when OP_MEM
+        elsif mem?
           self[:value][:mem]
-        when OP_FP
-          self[:value][:fp]
         end
       end
 
