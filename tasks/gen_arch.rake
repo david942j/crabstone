@@ -21,8 +21,20 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
   # 1. <arch>.rb, which defines the structure of <arch>_insn.
   # 2. <arch>_const.rb, defines constants in the architecture.
 
-  # TODO: This is hard..
-  def gen_arch; end
+  def gen_arch
+    glob('bindings/python/capstone/*.py') do |file|
+      next if file.end_with?('_const.py', '__init__.py')
+
+      py_mod = File.basename(file).sub('.py', '')
+      arch = py_mod == 'systemz' ? 'sysz' : py_mod
+      mod = module_name(arch)
+      write_file(arch + '.rb', mod, Helper::Python.new(py_mod).to_layout.join("\n"), <<~REQUIRE)
+        require 'ffi'
+
+        require_relative '#{arch}_const'
+      REQUIRE
+    end
+  end
 
   # Simply use values generated under capstone/bindings/python.
   def gen_const
@@ -31,31 +43,27 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
       res = File.foreach(file).map do |line|
         next '' if line.strip.start_with?('#')
 
-        line.strip.empty? ? "\n" : ' ' * 4 + line.gsub("#{arch.upcase}_", '')
+        line.strip.empty? ? "\n" : line.gsub("#{arch.upcase}_", '')
       end.join
       res.gsub!(/\n{3,}/, "\n\n") # Remove more than two empty lines
-      res << "\n    extend Register"
-      write_file("#{arch}_const.rb", module_name(arch), res.strip)
+      res << "\nextend Register"
+      write_file("#{arch}_const.rb", module_name(arch), res.strip,
+                 "require 'crabstone/arch/register'")
     end
   end
 
-  def header
-    <<~HEADER
+  def write_file(filename, mod, res, rqr)
+    puts "Writing #{filename}"
+    IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
       # frozen_string_literal: true
 
       # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-    HEADER
-  end
 
-  def write_file(filename, mod, res)
-    puts "Writing #{filename}"
-    IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
-      #{header}
-      require 'crabstone/arch/register'
+      #{rqr}
 
       module Crabstone
         module #{mod}
-          #{res}
+          #{res.lines.join('    ')}
         end
       end
     TEMPLATE

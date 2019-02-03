@@ -28,9 +28,9 @@ module Crabstone
 
     def initialize(arch, mode)
       maj, min = version
-      # if maj != BINDING_MAJ || min != BINDING_MIN
-        # raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
-      # end
+      if maj != BINDING_MAJ || min != BINDING_MIN
+        raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
+      end
 
       @arch    = arch
       @mode    = mode

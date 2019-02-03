@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'English'
+
 # Only for tasks/*.rake to use.
 # @private
 module Helper
@@ -10,7 +12,7 @@ module Helper
     # so we simply use upcase and fixup some cases.
     case arch
     when 'sparc' then 'Sparc'
-    when 'sysz' then 'SysZ'
+    when 'systemz', 'sysz' then 'SysZ'
     when 'xcore' then 'XCore'
     else arch.upcase
     end
@@ -23,6 +25,87 @@ module Helper
   def write_dotversion
     File.open(File.join(@target_dir, '.version'), 'w') do |f|
       f.puts @version
+    end
+  end
+
+  # Convert python/capstone/<arch>.py to arch/<version>/<arch>.rb
+  class Python
+    attr_reader :arch
+
+    def initialize(file)
+      @file = file
+      @arch = module_name(@file).downcase
+    end
+
+    # Use an extra python script to read those structs out and print them in normalized form to have the parsing
+    # procedure much easier.
+    def to_layout
+      res = `#{File.join(__dir__, 'print_structs.py')} #{@file}`
+      raise 'Unexpected error in python script' unless $CHILD_STATUS.exitstatus.zero?
+
+      res.lines.each_with_object([]) do |line, ret|
+        if line.start_with?('class ')
+          ret << to_ruby_class(line.slice(6..-1)) << '  layout('
+        elsif line.strip.empty?
+          ret << '  )' << "end\n"
+        else
+          ret << '    ' + to_field(line) + ','
+        end
+      end
+    end
+
+    private
+
+    # Convert 'SyszOpValue:UnionType' to 'OperantValue < FFI::Union'
+    # Only for {.py_to_layout} to use.
+    def to_ruby_class(py_class)
+      klass_name, ffi_type = py_class.strip.split(':')
+      ffi_type = {
+        'UnionType' => 'FFI::Union',
+        'PyCStructType' => 'FFI::Struct'
+      }[ffi_type] || raise("Unsupported type: #{py_class.inspect}")
+
+      "class #{normalize_class_name(klass_name)} < #{ffi_type}"
+    end
+
+    def normalize_class_name(py_class)
+      if py_class.start_with?('Cs')
+        'Instruction'
+      else
+        raise "Unexpcted class name: #{py_class.inspect}" unless py_class.downcase.start_with?(arch.downcase)
+
+        py_class[arch.size..-1].sub('Op', 'Operand').sub('Mem', 'Memory')
+      end
+    end
+
+    # operands, SyszOp, 6
+    # => :operands, [Operand, 6]
+    #
+    # op_count, c_ubyte
+    # => :op_count, :uint8
+    def to_field(line)
+      tokens = line.strip.split(',').map(&:strip)
+      raise "Unexpected error: #{line.inspect}" unless tokens.size.between?(2, 3)
+
+      name = tokens.shift
+      type = if tokens.size == 1
+               cpy_to_sym(tokens.first)
+             else # Array
+               "[#{cpy_to_sym(tokens.first)}, #{tokens.last}]"
+             end
+      "#{name.to_sym.inspect}, #{type}"
+    end
+
+    def cpy_to_sym(str)
+      return normalize_class_name(str) unless str.start_with?('c_')
+
+      str = str[2..-1]
+      case str
+      when 'uint', 'int', 'ulong', 'long', 'bool', 'double' then str.to_sym
+      when 'ubyte' then :uint8
+      when 'byte' then :int8
+      else raise "QQ: #{str.inspect}"
+      end.inspect
     end
   end
 
@@ -39,18 +122,23 @@ module Helper
 
     def fetch_struct(type)
       # Well..
-      no = @code.find_index { |l| l.index(/typedef\s+struct\s+#{type}/) }
+      no = @code.find_index { |l| l.index(/typedef\s+struct\s+#{type}\s*{/) }
       data = match_brackets do
         no += 1 while @code[no].strip.empty?
         @code[no].strip.gsub(/\s+/, ' ').tap { no += 1 }
       end
       expect(data.first, "typedef struct #{type} {")
       expect(data.last, "} #{type};")
+      temp = []
       data[1..-2].each_with_object(Struct.new) do |line, struct|
         # TODO: fetch union
         next if line.include?('{') || line.include?('}')
 
-        struct << Field.parse(line)
+        temp << line
+        next unless temp.last.strip.end_with?(';')
+
+        struct << Field.parse(temp.join(' '))
+        temp = []
       end
     end
 

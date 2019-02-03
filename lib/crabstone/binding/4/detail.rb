@@ -12,14 +12,14 @@ module Crabstone
       layout(
         :arm, ARM::Instruction,
         :arm64, ARM64::Instruction,
-        # :evm, EVM::Instruction,
-        # :m680x, M680X::Instruction,
-        # :m68k, M68K::Instruction,
+        :evm, EVM::Instruction,
+        :m680x, M680X::Instruction,
+        :m68k, M68K::Instruction,
         :mips, MIPS::Instruction,
         :ppc, PPC::Instruction,
         :sparc, Sparc::Instruction,
         :sysz, SysZ::Instruction,
-        # :tms320c64x, TMS320C64X::Instruction,
+        :tms320c64x, TMS320C64X::Instruction,
         :x86, X86::Instruction,
         :xcore, XCore::Instruction
       )
