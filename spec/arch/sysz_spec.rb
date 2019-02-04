@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::SysZ do
+describe 'Crabstone::SysZ' do
   def op_of(code, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_SYSZ, Crabstone::MODE_BIG_ENDIAN)
     cs.decomposer = true

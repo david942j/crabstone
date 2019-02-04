@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::PPC do
+describe 'Crabstone::PPC' do
   def op_of(code, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_PPC, Crabstone::MODE_BIG_ENDIAN)
     cs.decomposer = true

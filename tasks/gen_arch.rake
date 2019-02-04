@@ -138,7 +138,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
 
       require 'crabstone/disassembler'
 
-      describe Crabstone::#{module_name(arch)} do
+      describe 'Crabstone::#{module_name(arch)}' do
         def op_of(code, mode, index)
           @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_#{module_name(arch).upcase}, mode)
           cs.decomposer = true

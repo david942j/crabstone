@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::MIPS do
+describe 'Crabstone::MIPS' do
   def op_of(code, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_MIPS, Crabstone::MODE_MIPS32)
     cs.decomposer = true

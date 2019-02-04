@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::TMS320C64X do
+describe 'Crabstone::TMS320C64X' do
   def op_of(code, mode, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_TMS320C64X, mode)
     cs.decomposer = true

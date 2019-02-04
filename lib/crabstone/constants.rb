@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-# TODO: Auto-gerneate this file.
+# XXX: Auto-gerneate this file?
 # Constants in this file might be added in a newer Capstone version,
 # but I expect they are always backward compatible.
+
+require 'crabstone/version'
+
 module Crabstone
   # API version
-  BINDING_MAJ = 3
-  BINDING_MIN = 0
+  BINDING_MAJ = VERSION.split('.').first.to_i
 
   # architectures
   ARCH_ARM   = 0

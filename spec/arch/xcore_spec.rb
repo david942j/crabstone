@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::XCore do
+describe 'Crabstone::XCore' do
   def op_of(code, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_XCORE, Crabstone::MODE_BIG_ENDIAN)
     cs.decomposer = true

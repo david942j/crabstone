@@ -2,7 +2,7 @@
 
 require 'crabstone/disassembler'
 
-describe Crabstone::ARM64 do
+describe 'Crabstone::ARM64' do
   def op_of(code, index)
     @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_ARM64, Crabstone::MODE_ARM)
     cs.decomposer = true
