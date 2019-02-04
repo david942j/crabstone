@@ -49,7 +49,36 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
       res << "\nextend Register"
       write_file("#{arch}_const.rb", module_name(arch), res.strip,
                  "require 'crabstone/arch/register'")
+
+      # Generate spec/arch/*_spec.rb as well
+      gen_spec(res, arch)
     end
+  end
+
+  def gen_spec(constants, arch)
+    spec_file = File.expand_path(File.join(__dir__, '..', 'spec', 'arch', arch + '_spec.rb'))
+    return if File.exist?(spec_file)
+
+    types = constants.lines
+                     .select { |c| c.start_with?('OP_') && !c.index('INVALID') }
+                     .map { |c| c.split('=').first.strip.slice(3..-1).downcase }
+
+    puts "Writing #{File.basename(spec_file)}"
+    IO.binwrite(spec_file, <<~RUBY)
+      # frozen_string_literal: true
+
+      require 'crabstone/disassembler'
+
+      describe Crabstone::#{module_name(arch)} do
+        def op_of(code, mode, index)
+          @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_#{module_name(arch)}, mode)
+          cs.decomposer = true
+          cs.disasm(code, 0).first.operands[index]
+        end
+
+        #{types.map { |t| "it '#{t}' do\n  end" }.join("\n\n  ")}
+      end
+    RUBY
   end
 
   def write_file(filename, mod, res, rqr)
@@ -69,7 +98,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
     TEMPLATE
   end
 
-  gen_arch
+  # gen_arch
   gen_const
   write_dotversion
 

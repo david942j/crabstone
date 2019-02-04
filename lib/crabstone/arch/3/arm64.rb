@@ -51,23 +51,8 @@ module Crabstone
       )
 
       def value
-        val = self[:value]
-        if reg?            # Register operand.
-          val[:reg]
-        elsif imm?         # Immediate operand.
-          val[:imm]
-        elsif fp?          # Floating-Point immediate operand.
-          val[:fp]
-        elsif mem?         # Memory operand
-          val[:mem]
-        elsif pstate?      # PState operand.
-          val[:pstate]
-        elsif sys?         # SYS operand for IC/DC/AT/TLBI instructions.
-          val[:sys]
-        elsif prefetch?    # Prefetch operand (PRFM).
-          val[:prefetch]
-        elsif barrier?     # Memory barrier operand (ISB/DMB/DSB instructions).
-          val[:barrier]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 
