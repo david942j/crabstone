@@ -71,7 +71,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
 
       describe Crabstone::#{module_name(arch)} do
         def op_of(code, mode, index)
-          @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_#{module_name(arch)}, mode)
+          @cs = cs = Crabstone::Disassembler.new(Crabstone::ARCH_#{module_name(arch).upcase}, mode)
           cs.decomposer = true
           cs.disasm(code, 0).first.operands[index]
         end

@@ -57,6 +57,10 @@ module Crabstone
         self[:type] == OP_MEM
       end
 
+      def acreg?
+        self[:type] == OP_ACREG
+      end
+
       def valid?
         [OP_MEM, OP_IMM, OP_REG, OP_ACREG].include? self[:type]
       end

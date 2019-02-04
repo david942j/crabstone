@@ -66,8 +66,12 @@ module Crabstone
         self[:type] == OP_MEM
       end
 
+      def crx?
+        self[:type] == OP_CRX
+      end
+
       def valid?
-        [OP_MEM, OP_IMM, OP_REG].include? self[:type]
+        [OP_MEM, OP_IMM, OP_REG, OP_CRX].include? self[:type]
       end
     end
 
