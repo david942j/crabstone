@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# XXX: Auto-gerneate this file?
+# Error classes might be added in a newer Capstone version,
+# but this should not be frequent, currently this file is updated manually.
+
 module Crabstone
   class ErrArch < StandardError; end
   class ErrCsh < StandardError; end
@@ -15,6 +19,7 @@ module Crabstone
   class ErrSkipData < StandardError; end
   class ErrX86ATT < StandardError; end
   class ErrX86Intel < StandardError; end
+  class ErrX86MASM < StandardError; end
 
   ERRNO = {
     0 => ErrOK,
@@ -30,7 +35,8 @@ module Crabstone
     10 => ErrDiet,
     11 => ErrSkipData,
     12 => ErrX86ATT,
-    13 => ErrX86Intel
+    13 => ErrX86Intel,
+    14 => ErrX86MASM
   }.freeze
 
   # TODO: remove this
