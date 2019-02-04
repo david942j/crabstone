@@ -6,7 +6,8 @@ require 'crabstone/binding/structs'
 module Crabstone
   module Binding
     class Instruction < FFI::ManagedStruct
-      def self.release(ptr)
+      def self.release(obj)
+        ptr = obj.pointer
         detail_ptr = ptr.+(Instruction.offset_of(:detail)).read_pointer
         Binding.free(detail_ptr)
         Binding.free(ptr)

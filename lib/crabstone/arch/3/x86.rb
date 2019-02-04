@@ -42,15 +42,8 @@ module Crabstone
       # A spoonful of sugar...
 
       def value
-        case self[:type]
-        when OP_REG
-          self[:value][:reg]
-        when OP_IMM
-          self[:value][:imm]
-        when OP_MEM
-          self[:value][:mem]
-        when OP_FP
-          self[:value][:fp]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 

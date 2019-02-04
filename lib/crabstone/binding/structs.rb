@@ -8,14 +8,7 @@ Crabstone.version_require 'crabstone/binding/%v/instruction'
 module Crabstone
   module Binding
     # This is because JRuby FFI on x64 Windows thinks size_t is 32 bit
-    case FFI::Platform::ADDRESS_SIZE
-    when 64
-      typedef :ulong_long, :size_t
-    when 32
-      typedef :ulong, :size_t
-    else
-      raise 'Unsupported native address size'
-    end
+    typedef(FFI::Platform::ADDRESS_SIZE == 32 ? :ulong : :ulong_long, :size_t)
 
     # If one day these definitions change, move them to <version>/ dir.
 
