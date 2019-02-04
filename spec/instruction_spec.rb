@@ -31,7 +31,7 @@ describe Crabstone::Instruction do
     expect(inst.regs_write).to eq [Crabstone::X86::REG_RBP, Crabstone::X86::REG_RSP]
     expect(inst.writes_reg?('rsp')).to be true
     expect(inst.writes_reg?(Crabstone::X86::REG_RBP)).to be true
-    expect(inst.writes_reg?(31337)).to be false
+    expect(inst.writes_reg?(31_337)).to be false
   end
 
   it 'groups' do

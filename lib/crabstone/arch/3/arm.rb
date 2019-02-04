@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -18,7 +15,7 @@ module Crabstone
       )
     end
 
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :base, :uint,
         :index, :uint,
@@ -30,9 +27,9 @@ module Crabstone
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int32,
+        :imm, :int,
         :fp, :double,
-        :mem, MemoryOperand,
+        :mem, OperandMemory,
         :setend, :int
       )
     end
@@ -47,33 +44,24 @@ module Crabstone
       )
 
       def value
-        if reg?
-          self[:value][:reg]
-        elsif imm?
-          self[:value][:imm]
-        elsif mem?
-          self[:value][:mem]
-        elsif fp?
-          self[:value][:fp]
-        elsif setend?
-          self[:value][:setend]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 
       def reg?
-        [OP_REG, OP_SYSREG].include? self[:type]
+        [
+          OP_REG,
+          OP_SYSREG
+        ].include?(self[:type])
       end
 
       def imm?
-        [OP_IMM, OP_CIMM, OP_PIMM].include? self[:type]
-      end
-
-      def cimm?
-        self[:type] == OP_CIMM
-      end
-
-      def pimm?
-        self[:type] == OP_PIMM
+        [
+          OP_IMM,
+          OP_CIMM,
+          OP_PIMM
+        ].include?(self[:type])
       end
 
       def mem?
@@ -84,25 +72,24 @@ module Crabstone
         self[:type] == OP_FP
       end
 
-      def sysreg?
-        self[:type] == OP_SYSREG
+      def cimm?
+        self[:type] == OP_CIMM
+      end
+
+      def pimm?
+        self[:type] == OP_PIMM
       end
 
       def setend?
         self[:type] == OP_SETEND
       end
 
+      def sysreg?
+        self[:type] == OP_SYSREG
+      end
+
       def valid?
-        [
-          OP_MEM,
-          OP_IMM,
-          OP_CIMM,
-          OP_PIMM,
-          OP_FP,
-          OP_REG,
-          OP_SYSREG,
-          OP_SETEND
-        ].include? self[:type]
+        !value.nil?
       end
     end
 
@@ -122,7 +109,7 @@ module Crabstone
       )
 
       def operands
-        self[:operands].take_while { |op| op[:type].nonzero? }
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end

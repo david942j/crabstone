@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -11,22 +8,22 @@ require_relative 'x86_const'
 
 module Crabstone
   module X86
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :segment, :uint,
         :base, :uint,
         :index, :uint,
         :scale, :int,
-        :disp, :int64
+        :disp, :long
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int64,
+        :imm, :long,
         :fp, :double,
-        :mem, MemoryOperand
+        :mem, OperandMemory
       )
     end
 
@@ -38,8 +35,6 @@ module Crabstone
         :avx_bcast, :uint,
         :avx_zero_opmask, :bool
       )
-
-      # A spoonful of sugar...
 
       def value
         OperandValue.members.find do |s|
@@ -64,7 +59,7 @@ module Crabstone
       end
 
       def valid?
-        [OP_MEM, OP_IMM, OP_FP, OP_REG].include? self[:type]
+        !value.nil?
       end
     end
 
@@ -76,7 +71,7 @@ module Crabstone
         :addr_size, :uint8,
         :modrm, :uint8,
         :sib, :uint8,
-        :disp, :int32,
+        :disp, :int,
         :sib_index, :uint,
         :sib_scale, :int8,
         :sib_base, :uint,
@@ -89,7 +84,7 @@ module Crabstone
       )
 
       def operands
-        self[:operands].first self[:op_count]
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end

@@ -58,7 +58,7 @@ describe Crabstone::Disassembler do
     cs.skipdata { raise 'ggsmida' }
     expect { cs.disasm("\xff", 0) }
       .to output("Error in skipdata callback: ggsmida\n").to_stderr
-      .and raise_error(Crabstone::ErrOK)
+                                                         .and raise_error(Crabstone::ErrOK)
   end
 
   it 'disasm error' do

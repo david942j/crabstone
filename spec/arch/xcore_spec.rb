@@ -30,6 +30,6 @@ describe Crabstone::XCore do
     expect(op.mem?).to be true
     expect(@cs.reg_name(op.value[:base])).to eq 'r2'
     expect(op.value[:disp]).to be 9
-    expect(op.value[:direct]).to be -1
+    expect(op.value[:direct]).to be(-1)
   end
 end

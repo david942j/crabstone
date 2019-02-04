@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -18,20 +15,20 @@ module Crabstone
       )
     end
 
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :base, :uint,
         :index, :uint,
-        :disp, :int32
+        :disp, :int
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int64,
+        :imm, :long,
         :fp, :double,
-        :mem, MemoryOperand,
+        :mem, OperandMemory,
         :pstate, :int,
         :sys, :uint,
         :prefetch, :int,
@@ -49,13 +46,6 @@ module Crabstone
         :type, :uint,
         :value, OperandValue
       )
-
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
-
       def shift?
         self[:shift][:type] != SFT_INVALID
       end
@@ -64,16 +54,25 @@ module Crabstone
         self[:ext] != EXT_INVALID
       end
 
+      def value
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
+        end
+      end
+
       def reg?
-        [OP_REG, OP_REG_MRS, OP_REG_MSR].include?(self[:type])
+        [
+          OP_REG,
+          OP_REG_MRS,
+          OP_REG_MSR
+        ].include?(self[:type])
       end
 
       def imm?
-        [OP_IMM, OP_CIMM].include?(self[:type])
-      end
-
-      def cimm?
-        self[:type] == OP_CIMM
+        [
+          OP_IMM,
+          OP_CIMM
+        ].include?(self[:type])
       end
 
       def mem?
@@ -84,20 +83,20 @@ module Crabstone
         self[:type] == OP_FP
       end
 
-      def pstate?
-        self[:type] == OP_PSTATE
-      end
-
-      def reg_msr?
-        self[:type] == OP_REG_MSR
+      def cimm?
+        self[:type] == OP_CIMM
       end
 
       def reg_mrs?
         self[:type] == OP_REG_MRS
       end
 
-      def barrier?
-        self[:type] == OP_BARRIER
+      def reg_msr?
+        self[:type] == OP_REG_MSR
+      end
+
+      def pstate?
+        self[:type] == OP_PSTATE
       end
 
       def sys?
@@ -108,20 +107,12 @@ module Crabstone
         self[:type] == OP_PREFETCH
       end
 
+      def barrier?
+        self[:type] == OP_BARRIER
+      end
+
       def valid?
-        [
-          OP_REG,
-          OP_CIMM,
-          OP_IMM,
-          OP_FP,
-          OP_MEM,
-          OP_REG_MRS,
-          OP_REG_MSR,
-          OP_PSTATE,
-          OP_SYS,
-          OP_PREFETCH,
-          OP_BARRIER
-        ].include? self[:type]
+        !value.nil?
       end
     end
 
@@ -135,7 +126,7 @@ module Crabstone
       )
 
       def operands
-        self[:operands].take_while { |op| op[:type].nonzero? }
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end

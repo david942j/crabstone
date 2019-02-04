@@ -24,7 +24,7 @@ describe Crabstone::Sparc do
     # bne -4
     op = op_of("\x12\xbf\xff\xff", Crabstone::MODE_BIG_ENDIAN, 0)
     expect(op.imm?).to be true
-    expect(op.value).to be (-4)
+    expect(op.value).to be(-4)
     expect(@cs.disasm("\x12\xbf\xff\xff", 0).first.cc).to be Crabstone::Sparc::CC_ICC_NE
   end
 
