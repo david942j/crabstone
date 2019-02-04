@@ -4,22 +4,26 @@
 
 require 'ffi'
 
-require_relative 'sparc_const'
+require_relative 'tms320c64x_const'
 
 module Crabstone
-  module Sparc
+  module TMS320C64X
     class OperandMemory < FFI::Struct
       layout(
-        :base, :uint8,
-        :index, :uint8,
-        :disp, :int
+        :base, :int,
+        :disp, :int,
+        :unit, :int,
+        :scaled, :int,
+        :disptype, :int,
+        :direction, :int,
+        :modify, :int
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :long,
+        :imm, :int,
         :mem, OperandMemory
       )
     end
@@ -37,7 +41,10 @@ module Crabstone
       end
 
       def reg?
-        self[:type] == OP_REG
+        [
+          OP_REG,
+          OP_REGPAIR
+        ].include?(self[:type])
       end
 
       def imm?
@@ -48,17 +55,37 @@ module Crabstone
         self[:type] == OP_MEM
       end
 
+      def regpair?
+        self[:type] == OP_REGPAIR
+      end
+
       def valid?
         !value.nil?
       end
     end
 
+    class Condition < FFI::Struct
+      layout(
+        :reg, :uint,
+        :zero, :uint
+      )
+    end
+
+    class FunctionalUnit < FFI::Struct
+      layout(
+        :unit, :uint,
+        :side, :uint,
+        :crosspath, :uint
+      )
+    end
+
     class Instruction < FFI::Struct
       layout(
-        :cc, :uint,
-        :hint, :uint,
         :op_count, :uint8,
-        :operands, [Operand, 4]
+        :operands, [Operand, 8],
+        :condition, Condition,
+        :funit, FunctionalUnit,
+        :parallel, :uint
       )
 
       def operands

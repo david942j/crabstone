@@ -40,8 +40,11 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
 
   # insert methods into Operand and Instruction
   def insert_methods(arch, ruby_code)
+    op_index = ruby_code.index('class Operand < ')
+    return ruby_code if op_index.nil?
+
     # insert class Operand
-    idx = ruby_code.index('end', ruby_code.index('class Operand < '))
+    idx = ruby_code.index('end', op_index)
     op_types = File.readlines(File.join(@target_dir, arch + '_const.rb'))
                    .map(&:strip)
                    .select { |l| l.start_with?('OP_') && !l.index('OP_INVALID') }

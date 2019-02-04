@@ -27,10 +27,10 @@ module Crabstone
     attr_reader :arch, :mode, :csh, :syntax, :decomposer
 
     def initialize(arch, mode)
-      maj, min = version
-      if maj != BINDING_MAJ || min != BINDING_MIN
-        raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
-      end
+      # maj, min = version
+      # if maj != BINDING_MAJ || min != BINDING_MIN
+        # raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
+      # end
 
       @arch = arch
       @mode = mode

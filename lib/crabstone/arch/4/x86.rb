@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -11,21 +8,21 @@ require_relative 'x86_const'
 
 module Crabstone
   module X86
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :segment, :uint,
         :base, :uint,
         :index, :uint,
         :scale, :int,
-        :disp, :int64
+        :disp, :long
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int64,
-        :mem, MemoryOperand
+        :imm, :long,
+        :mem, OperandMemory
       )
     end
 
@@ -39,16 +36,9 @@ module Crabstone
         :avx_zero_opmask, :bool
       )
 
-      # A spoonful of sugar...
-
       def value
-        case self[:type]
-        when OP_REG
-          self[:value][:reg]
-        when OP_IMM
-          self[:value][:imm]
-        when OP_MEM
-          self[:value][:mem]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 
@@ -65,11 +55,11 @@ module Crabstone
       end
 
       def valid?
-        [OP_MEM, OP_IMM, OP_REG].include? self[:type]
+        !value.nil?
       end
     end
 
-    class Encoding < FFI::Struct
+    class Instruction < FFI::Struct
       layout(
         :modrm_offset, :uint8,
         :disp_offset, :uint8,
@@ -77,6 +67,10 @@ module Crabstone
         :imm_offset, :uint8,
         :imm_size, :uint8
       )
+
+      def operands
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
+      end
     end
 
     class Instruction < FFI::Struct
@@ -87,7 +81,7 @@ module Crabstone
         :addr_size, :uint8,
         :modrm, :uint8,
         :sib, :uint8,
-        :disp, :int64,
+        :disp, :long,
         :sib_index, :uint,
         :sib_scale, :int8,
         :sib_base, :uint,
@@ -96,15 +90,11 @@ module Crabstone
         :avx_cc, :uint,
         :avx_sae, :bool,
         :avx_rm, :uint,
-        :eflags, :uint64,
+        :eflags, :ulong,
         :op_count, :uint8,
         :operands, [Operand, 8],
-        :encoding, Encoding
+        :encoding, Instruction
       )
-
-      def operands
-        self[:operands].first self[:op_count]
-      end
     end
   end
 end

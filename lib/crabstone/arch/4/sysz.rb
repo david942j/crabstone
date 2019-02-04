@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -11,20 +8,20 @@ require_relative 'sysz_const'
 
 module Crabstone
   module SysZ
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :base, :uint8,
         :index, :uint8,
-        :length, :uint64,
-        :disp, :int64
+        :length, :ulong,
+        :disp, :long
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int64,
-        :mem, MemoryOperand
+        :imm, :long,
+        :mem, OperandMemory
       )
     end
 
@@ -35,18 +32,16 @@ module Crabstone
       )
 
       def value
-        case self[:type]
-        when OP_REG, OP_ACREG
-          self[:value][:reg]
-        when OP_IMM
-          self[:value][:imm]
-        when OP_MEM
-          self[:value][:mem]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 
       def reg?
-        [OP_REG, OP_ACREG].include? self[:type]
+        [
+          OP_REG,
+          OP_ACREG
+        ].include?(self[:type])
       end
 
       def imm?
@@ -57,8 +52,12 @@ module Crabstone
         self[:type] == OP_MEM
       end
 
+      def acreg?
+        self[:type] == OP_ACREG
+      end
+
       def valid?
-        [OP_MEM, OP_IMM, OP_REG, OP_ACREG].include? self[:type]
+        !value.nil?
       end
     end
 
@@ -70,7 +69,7 @@ module Crabstone
       )
 
       def operands
-        self[:operands].take_while { |op| op[:type].nonzero? }
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end

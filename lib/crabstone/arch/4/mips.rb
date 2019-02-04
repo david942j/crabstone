@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -11,18 +8,18 @@ require_relative 'mips_const'
 
 module Crabstone
   module MIPS
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :base, :uint,
-        :disp, :int64
+        :disp, :long
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :long_long,
-        :mem, MemoryOperand
+        :imm, :long,
+        :mem, OperandMemory
       )
     end
 
@@ -33,15 +30,8 @@ module Crabstone
       )
 
       def value
-        case self[:type]
-        when OP_REG
-          self[:value][:reg]
-        when OP_IMM
-          self[:value][:imm]
-        when OP_MEM
-          self[:value][:mem]
-        when OP_FP
-          self[:value][:fp]
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
         end
       end
 
@@ -58,18 +48,18 @@ module Crabstone
       end
 
       def valid?
-        [OP_MEM, OP_IMM, OP_REG].include? self[:type]
+        !value.nil?
       end
     end
 
     class Instruction < FFI::Struct
       layout(
         :op_count, :uint8,
-        :operands, [Operand, 8]
+        :operands, [Operand, 10]
       )
 
       def operands
-        self[:operands].take_while { |op| op[:type].nonzero? }
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end

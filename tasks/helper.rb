@@ -101,7 +101,7 @@ module Helper
 
       str = str[2..-1]
       case str
-      when 'uint', 'int', 'ulong', 'long', 'bool', 'double' then str.to_sym
+      when 'uint', 'int', 'ulong', 'long', 'bool', 'float', 'ushort', 'short', 'double' then str.to_sym
       when 'ubyte' then :uint8
       when 'byte' then :int8
       else raise "QQ: #{str.inspect}"

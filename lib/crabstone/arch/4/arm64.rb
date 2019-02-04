@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Library by Nguyen Anh Quynh
-# Original binding by Nguyen Anh Quynh and Tan Sheng Di
-# Additional binding work by Ben Nagy
-# (c) 2013 COSEINC. All Rights Reserved.
+# THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
 
 require 'ffi'
 
@@ -18,20 +15,20 @@ module Crabstone
       )
     end
 
-    class MemoryOperand < FFI::Struct
+    class OperandMemory < FFI::Struct
       layout(
         :base, :uint,
         :index, :uint,
-        :disp, :int32
+        :disp, :int
       )
     end
 
     class OperandValue < FFI::Union
       layout(
         :reg, :uint,
-        :imm, :int64,
+        :imm, :long,
         :fp, :double,
-        :mem, MemoryOperand,
+        :mem, OperandMemory,
         :pstate, :int,
         :sys, :uint,
         :prefetch, :int,
@@ -47,39 +44,9 @@ module Crabstone
         :shift, OperandShift,
         :ext, :uint,
         :type, :uint,
-        :value, OperandValue
+        :value, OperandValue,
+        :access, :uint8
       )
-
-      def value
-        val = self[:value]
-        case self[:type]
-        when OP_REG, OP_REG_MRS, OP_REG_MSR  # Register operand.
-          val[:reg]
-        when OP_IMM, OP_CIMM                 # Immediate operand.
-          val[:imm]
-        when OP_FP                              # Floating-Point immediate operand.
-          val[:fp]
-        when OP_MEM                             # Memory operand
-          val[:mem]
-        when OP_PSTATE                          # PState operand.
-          val[:pstate]
-        when OP_SYS                             # SYS operand for IC/DC/AT/TLBI instructions.
-          val[:sys]
-        when OP_PREFETCH                        # Prefetch operand (PRFM).
-          val[:prefetch]
-        when OP_BARRIER                         # Memory barrier operand (ISB/DMB/DSB instructions).
-          val[:barrier]
-        end
-      end
-
-      def shift_type
-        self[:shift][:type]
-      end
-
-      def shift_value
-        self[:shift][:value]
-      end
-
       def shift?
         self[:shift][:type] != SFT_INVALID
       end
@@ -88,16 +55,25 @@ module Crabstone
         self[:ext] != EXT_INVALID
       end
 
+      def value
+        OperandValue.members.find do |s|
+          return self[:value][s] if __send__("#{s}?".to_sym)
+        end
+      end
+
       def reg?
-        self[:type] == OP_REG
+        [
+          OP_REG,
+          OP_REG_MRS,
+          OP_REG_MSR
+        ].include?(self[:type])
       end
 
       def imm?
-        self[:type] == OP_IMM
-      end
-
-      def cimm?
-        self[:type] == OP_CIMM
+        [
+          OP_IMM,
+          OP_CIMM
+        ].include?(self[:type])
       end
 
       def mem?
@@ -108,41 +84,36 @@ module Crabstone
         self[:type] == OP_FP
       end
 
+      def cimm?
+        self[:type] == OP_CIMM
+      end
+
+      def reg_mrs?
+        self[:type] == OP_REG_MRS
+      end
+
+      def reg_msr?
+        self[:type] == OP_REG_MSR
+      end
+
       def pstate?
         self[:type] == OP_PSTATE
       end
 
-      def msr?
-        self[:type] == OP_REG_MSR
-      end
-
-      def mrs?
-        self[:type] == OP_REG_MRS
-      end
-
-      def barrier?
-        self[:type] == OP_BARRIER
+      def sys?
+        self[:type] == OP_SYS
       end
 
       def prefetch?
         self[:type] == OP_PREFETCH
       end
 
+      def barrier?
+        self[:type] == OP_BARRIER
+      end
+
       def valid?
-        [
-          OP_INVALID,
-          OP_REG,
-          OP_CIMM,
-          OP_IMM,
-          OP_FP,
-          OP_MEM,
-          OP_REG_MRS,
-          OP_REG_MSR,
-          OP_PSTATE,
-          OP_SYS,
-          OP_PREFETCH,
-          OP_BARRIER
-        ].include? self[:type]
+        !value.nil?
       end
     end
 
@@ -156,7 +127,7 @@ module Crabstone
       )
 
       def operands
-        self[:operands].take_while { |op| op[:type].nonzero? }
+        self[:operands].take_while { |op| op[:type] != OP_INVALID }
       end
     end
   end
