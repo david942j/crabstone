@@ -1,49 +1,32 @@
+# frozen_string_literal: true
+
+require 'crabstone/arch'
+require 'crabstone/binding'
 require 'crabstone/constants'
+require 'crabstone/error'
 
 module Crabstone
   class Instruction
-    attr_reader :arch, :csh, :raw_insn
-
-    ARCHS = {
-      arm: ARCH_ARM,
-      arm64: ARCH_ARM64,
-      x86: ARCH_X86,
-      mips: ARCH_MIPS,
-      ppc: ARCH_PPC,
-      sparc: ARCH_SPARC,
-      sysz: ARCH_SYSZ,
-      xcore: ARCH_XCORE
-    }.invert
-
-    ARCH_CLASSES = {
-      ARCH_ARM => ARM,
-      ARCH_ARM64 => ARM64,
-      ARCH_X86 => X86,
-      ARCH_MIPS => MIPS,
-      ARCH_PPC => PPC,
-      ARCH_SPARC => Sparc,
-      ARCH_SYSZ => SysZ,
-      ARCH_XCORE => XCore
-    }.freeze
+    attr_reader :csh, :raw_insn
 
     def initialize(csh, insn, arch)
-      @arch       = arch
-      @csh        = csh
-      @raw_insn   = insn
+      @arch_module = Arch.module_of(arch)
+      @csh = csh
+      @raw_insn = insn
       init_detail(insn[:detail]) if detailed?
     end
 
     def name
       raise_if_diet
       name = Binding.cs_insn_name(csh, id)
-      Crabstone.raise_errno(ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
     def group_name(grp)
       raise_if_diet
       name = Binding.cs_group_name(csh, Integer(grp))
-      Crabstone.raise_errno(ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
@@ -75,22 +58,22 @@ module Crabstone
       @groups
     end
 
-    def group?(groupid)
+    def group?(group_id)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_insn_group csh, raw_insn, groupid
+      Binding.cs_insn_group(csh, raw_insn, group_id)
     end
 
     def reads_reg?(reg)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_reg_read csh, raw_insn, ARCH_CLASSES[arch].register(reg)
+      Binding.cs_reg_read(csh, raw_insn, @arch_module.register(reg))
     end
 
     def writes_reg?(reg)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_reg_write csh, raw_insn, ARCH_CLASSES[arch].register(reg)
+      Binding.cs_reg_write(csh, raw_insn, @arch_module.register(reg))
     end
 
     def mnemonic
@@ -106,14 +89,14 @@ module Crabstone
     def op_count(op_type = nil)
       raise_unless_detailed
       if op_type
-        Binding.cs_op_count csh, raw_insn, op_type
+        Binding.cs_op_count(csh, raw_insn, op_type)
       else
         operands.size
       end
     end
 
     def bytes
-      raw_insn[:bytes].first raw_insn[:size]
+      raw_insn[:bytes].first(raw_insn[:size])
     end
 
     # So an Instruction should respond to all the methods in Instruction, and
@@ -143,31 +126,40 @@ module Crabstone
       end
     end
 
-    def respond_to_missing?(meth)
+    def respond_to_missing?(meth, include_private = true)
       return true if raw_insn.members.include?(meth)
-      return false unless detailed?
+      return super unless detailed?
       return true if @arch_insn.respond_to?(meth)
       return true if @arch_insn.members.include?(meth)
 
-      false
+      super
     end
 
     private
 
     def raise_unless_detailed
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDetail]) unless detailed?
+      Crabstone::Error.raise!(ErrDetail) unless detailed?
     end
 
     def raise_if_diet
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDiet]) if DIET_MODE
+      Crabstone::Error.raise!(ErrDiet) if DIET_MODE
     end
 
     def init_detail(detail)
       @detail     = detail
-      @arch_insn  = @detail[:arch][ARCHS[arch]]
+      @arch_insn  = @detail[:arch][arch_field]
       @regs_read  = @detail[:regs_read].first(@detail[:regs_read_count])
       @regs_write = @detail[:regs_write].first(@detail[:regs_write_count])
       @groups     = @detail[:groups].first(@detail[:groups_count])
+    end
+
+    # Find the field name of Architecture.
+    def arch_field
+      klass = @arch_module.const_get(:Instruction)
+      obj = Binding::Architecture.new
+      Binding::Architecture.members.find do |sym|
+        obj[sym].instance_of?(klass)
+      end
     end
   end
 end

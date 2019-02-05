@@ -1,12 +1,13 @@
-require 'crabstone/binding/structs'
-require 'crabstone/constants'
+# frozen_string_literal: true
 
-# TODO: This file should require proper files according to the
-# return value of cs_version.
+require 'crabstone/constants'
+require 'crabstone/binding/structs'
+
 module Crabstone
   module Binding
     class Instruction < FFI::ManagedStruct
-      def self.release(ptr)
+      def self.release(obj)
+        ptr = obj.pointer
         detail_ptr = ptr.+(Instruction.offset_of(:detail)).read_pointer
         Binding.free(detail_ptr)
         Binding.free(ptr)
@@ -32,7 +33,8 @@ module Crabstone
     attach_function :cs_reg_write, [:csh, Instruction, :uint], :bool
     attach_function :cs_strerror, [:cs_err], :string
     attach_function :cs_support, [:cs_arch], :bool
-    attach_function :cs_version, %i[pointer pointer], :uint
+    # Already defined in cs_version.rb
+    # attach_function :cs_version, %i[pointer pointer], :uint
     attach_function :memcpy, %i[pointer pointer size_t], :pointer
     attach_function :malloc, [:size_t], :pointer
     attach_function :free, [:pointer], :void

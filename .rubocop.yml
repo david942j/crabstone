@@ -1,9 +1,16 @@
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
+  TargetRubyVersion: 2.3
 
 Layout/EndOfLine:
   EnforcedStyle: lf
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
 
 Metrics/ClassLength:
   Enabled: false

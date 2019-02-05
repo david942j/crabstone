@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'ffi'
 
 require 'crabstone/binding'
 require 'crabstone/error'
 require 'crabstone/instruction'
+require 'crabstone/version'
 
 module Crabstone
   class Disassembler
@@ -26,17 +29,13 @@ module Crabstone
 
     def initialize(arch, mode)
       maj, min = version
-      if maj != BINDING_MAJ || min != BINDING_MIN
-        raise "FATAL: Binding for #{BINDING_MAJ}.#{BINDING_MIN}, found #{maj}.#{min}"
-      end
+      raise "FATAL: Crabstone v#{VERSION} doesn't support binding Capstone v#{maj}.#{min}" if maj > BINDING_MAJ
 
-      @arch    = arch
-      @mode    = mode
-      p_size_t = FFI::MemoryPointer.new :ulong_long
-      @p_csh = FFI::MemoryPointer.new p_size_t
-      if (res = Binding.cs_open(arch, mode, @p_csh)).nonzero?
-        Crabstone.raise_errno res
-      end
+      @arch = arch
+      @mode = mode
+      p_size_t = FFI::MemoryPointer.new(:ulong_long)
+      @p_csh = FFI::MemoryPointer.new(p_size_t)
+      safe { Binding.cs_open(arch, mode, @p_csh) }
 
       @csh = @p_csh.read_ulong_long
     end
@@ -46,19 +45,18 @@ module Crabstone
     #
     # @return [void]
     def close
-      res = Binding.cs_close(@p_csh)
-      Crabstone.raise_errno(res) unless res.zero?
+      safe { Binding.cs_close(@p_csh) }
     end
 
     def syntax=(new_stx)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless SYNTAX[new_stx]
+      Crabstone::Error.raise!(ErrOption) unless SYNTAX[new_stx]
       set_raw_option(OPT_SYNTAX, SYNTAX[new_stx])
       @syntax = new_stx
     end
 
     # @param [Boolean] new_val
     def decomposer=(new_val)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless DETAIL[new_val]
+      Crabstone::Error.raise!(ErrOption) unless DETAIL[new_val]
       set_raw_option(OPT_DETAIL, DETAIL[new_val])
       @decomposer = new_val
     end
@@ -66,7 +64,7 @@ module Crabstone
     def version
       maj = FFI::MemoryPointer.new(:int)
       min = FFI::MemoryPointer.new(:int)
-      Binding.cs_version maj, min
+      Binding.cs_version(maj, min)
       [maj.read_int, min.read_int]
     end
 
@@ -106,9 +104,9 @@ module Crabstone
     end
 
     def reg_name(regid)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDiet]) if DIET_MODE
+      Crabstone::Error.raise!(ErrDiet) if DIET_MODE
       name = Binding.cs_reg_name(csh, regid)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
@@ -125,14 +123,13 @@ module Crabstone
         count,
         insn_ptr
       )
-      Crabstone.raise_errno(errno) if insn_count.zero?
+      Crabstone::Error.raise_errno!(errno) if insn_count.zero?
 
       convert_disasm_result(insn_ptr, insn_count).tap { Binding.free(insn_ptr.read_pointer) }
     end
 
     def set_raw_option(opt, val)
-      res = Binding.cs_option(csh, opt, val)
-      Crabstone.raise_errno(res) if res.nonzero?
+      safe { Binding.cs_option(csh, opt, val) }
     end
 
     private
@@ -148,6 +145,10 @@ module Crabstone
         Binding.memcpy(cs_insn_ptr, insn_ptr.read_pointer + i * insn_sz, insn_sz)
         Crabstone::Instruction.new(@csh, Binding::Instruction.new(cs_insn_ptr), @arch)
       end
+    end
+
+    def safe
+      yield.tap { |res| Crabstone.raise_errno(res) unless res.zero? }
     end
   end
 end

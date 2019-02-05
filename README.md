@@ -1,12 +1,7 @@
 crabstone
 ====
 
-STATUS
-===
-
-Hopefully working.
-
-Current Library binding: 3.0.3-rc1
+Current library support: 4.0.1
 ----
 
 ( FROM THE CAPSTONE README )
@@ -41,54 +36,42 @@ To install:
 First install the capstone library from either https://github.com/aquynh/capstone
 or http://www.capstone-engine.org
 
-Then (until we publish a gem) clone the repo, then do this:
+Then:
 
 ```bash
-gem build crabstone.gemspec
-gem install crabstone-3.0.3.gem
-rake test
+gem install crabstone
 ```
 
 To write code:
 ----
 
-Check the tests for more examples. Here is "Hello World":
+Check the tests in [Capstone](https://github.com/aquynh/capstone) for more examples. Here is "Hello World":
 ```ruby
+
 require 'crabstone'
 include Crabstone
-
-arm = (
-  "\xED\xFF\xFF\xEB\x04\xe0\x2d\xe5\x00\x00\x00\x00\xe0\x83\x22" <<
+arm =
+  "\xED\xFF\xFF\xEB\x04\xe0\x2d\xe5\x00\x00\x00\x00\xe0\x83\x22" \
   "\xe5\xf1\x02\x03\x0e\x00\x00\xa0\xe3\x02\x30\xc1\xe7\x00\x00\x53\xe3"
-)
 
 begin
-  
   cs = Disassembler.new(ARCH_ARM, MODE_ARM)
-  puts "Hello from Capstone v #{cs.version.join('.')}!"
-  puts "Disasm:"
+  puts "Hello from Capstone v#{cs.version.join('.')}!"
+  puts 'Disasm:'
 
   begin
-    cs.disasm(arm, 0x1000).each {|i|
-      printf("0x%x:\t%s\t\t%s\n",i.address, i.mnemonic, i.op_str)
-    }
-  rescue
-    fail "Disassembly error: #{$!}"
+    cs.disasm(arm, 0x1000).each do |i|
+      printf("0x%x:\t%s\t\t%s\n", i.address, i.mnemonic, i.op_str)
+    end
+  rescue StandardError => e
+    raise "Disassembly error: #{e.message}"
   ensure
     cs.close
   end
-
-rescue
-  fail "Unable to open engine: #{$!}"
+rescue StandardError => e
+  raise "Unable to open engine: #{e.message}"
 end
 ```
-
-Interpreter Support:
-----
-
-I test with JRuby >= 1.7.8, MRI >= 2.0.0. If it doesn't work with any of those
-it's a bug. If it doesn't work with like Rubinius or REE or 1.8 or whatever then
-"patches welcome". ( AFAIK it does, actually, work with rbx )
 
 Contributing:
 ----
