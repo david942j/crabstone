@@ -34,6 +34,15 @@ describe Crabstone::Instruction do
     expect(inst.writes_reg?(31_337)).to be false
   end
 
+  it 'regs_access' do
+    skip 'cs_regs_access not supported yet' unless Crabstone::Binding.respond_to?(:cs_regs_access)
+    # push rax
+    inst = @cs.disasm('P', 0).first
+    access = inst.regs_access
+    expect(access[:regs_read].sort).to eq [Crabstone::X86::REG_RAX, Crabstone::X86::REG_RSP]
+    expect(access[:regs_write]).to eq [Crabstone::X86::REG_RSP]
+  end
+
   it 'groups' do
     # leave // equivalent to (mov rsp, rbp; pop rbp)
     inst = @cs.disasm("\xc9", 0).first

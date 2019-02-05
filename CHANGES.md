@@ -1,6 +1,7 @@
 ## 4.0.0
 * Supported *both* Capstone 3.x and 4.x.
 * Supported 4 new architectures: M68K, M680X, TMS320C64x, and EVM.
+* Added `cs_regs_access` API (wrapped as `Instruction#regs_access` in Crabstone).
 * Changed some internal constants and methods.
 * Fixed tons of bugs.
 * For more details, see https://github.com/david942j/crabstone/pull/2

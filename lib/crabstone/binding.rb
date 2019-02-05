@@ -38,14 +38,23 @@ module Crabstone
     attach_function :memcpy, %i[pointer pointer size_t], :pointer
     attach_function :malloc, [:size_t], :pointer
     attach_function :free, [:pointer], :void
+
+    # Wrap to prevent function not found in elder Capstone.
+    def self.safe_attach(*args)
+      attach_function(*args)
+    rescue FFI::NotFoundError
+    end
+
+    # New APIs since Capstone 4.
+    safe_attach :cs_regs_access, [:csh, Instruction, :pointer, :pointer, :pointer, :pointer], :cs_err
   end
 
   # This is a C engine build option, so we can set it here, not when we
   # instantiate a new Disassembler.
-  DIET_MODE = Binding.cs_support(SUPPORT_DIET)
   # Diet mode means:
   # - No op_str or mnemonic in Instruction
   # - No regs_read, regs_write or groups ( even with detail on )
   # - No reg_name or insn_name id2str convenience functions
   # - detail mode CAN still be on - so the arch insn operands MAY be available
+  DIET_MODE = Binding.cs_support(SUPPORT_DIET)
 end

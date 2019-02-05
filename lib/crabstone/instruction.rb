@@ -76,6 +76,24 @@ module Crabstone
       Binding.cs_reg_write(csh, raw_insn, @arch_module.register(reg))
     end
 
+    # @return [{:regs_read => Array<Integer>, :regs_write => Array<Integer>}]
+    def regs_access
+      raise_unless_detailed
+      raise_if_diet
+
+      # XXX: Becare of if `typedef uint16_t cs_regs[64];` changes
+      regs_read = FFI::MemoryPointer.new(:uint16, 64)
+      regs_read_count = FFI::MemoryPointer.new(:uint8)
+      regs_write = FFI::MemoryPointer.new(:uint16, 64)
+      regs_write_count = FFI::MemoryPointer.new(:uint8)
+      err = Binding.cs_regs_access(csh, raw_insn, regs_read, regs_read_count, regs_write, regs_write_count)
+      Crabstone::Error.raise_errno(err) if err.nonzero?
+      {
+        regs_read: regs_read.read_array_of_short(regs_read_count.read_int8),
+        regs_write: regs_write.read_array_of_short(regs_write_count.read_int8)
+      }
+    end
+
     def mnemonic
       raise_if_diet
       raw_insn[:mnemonic]

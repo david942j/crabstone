@@ -33,8 +33,7 @@ module Crabstone
 
       @arch = arch
       @mode = mode
-      p_size_t = FFI::MemoryPointer.new(:ulong_long)
-      @p_csh = FFI::MemoryPointer.new(p_size_t)
+      @p_csh = FFI::MemoryPointer.new(:ulong_long)
       safe { Binding.cs_open(arch, mode, @p_csh) }
 
       @csh = @p_csh.read_ulong_long
