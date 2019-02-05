@@ -1,45 +1,18 @@
 # frozen_string_literal: true
 
+require 'crabstone/arch'
+require 'crabstone/binding'
 require 'crabstone/constants'
+require 'crabstone/error'
 
 module Crabstone
   class Instruction
-    attr_reader :arch, :csh, :raw_insn
-
-    ARCHS = {
-      arm: ARCH_ARM,
-      arm64: ARCH_ARM64,
-      x86: ARCH_X86,
-      mips: ARCH_MIPS,
-      ppc: ARCH_PPC,
-      sparc: ARCH_SPARC,
-      sysz: ARCH_SYSZ,
-      xcore: ARCH_XCORE,
-      m68k: ARCH_M68K,
-      tms320c64x: ARCH_TMS320C64X,
-      m680x: ARCH_M680X,
-      evm: ARCH_EVM
-    }.invert.freeze
-
-    ARCH_CLASSES = {
-      ARCH_ARM => ARM,
-      ARCH_ARM64 => ARM64,
-      ARCH_X86 => X86,
-      ARCH_MIPS => MIPS,
-      ARCH_PPC => PPC,
-      ARCH_SPARC => Sparc,
-      ARCH_SYSZ => SysZ,
-      ARCH_XCORE => XCore,
-      ARCH_M68K => M68K,
-      ARCH_TMS320C64X => TMS320C64X,
-      ARCH_M680X => M680X,
-      ARCH_EVM => EVM
-    }.freeze
+    attr_reader :csh, :raw_insn
 
     def initialize(csh, insn, arch)
-      @arch       = arch
-      @csh        = csh
-      @raw_insn   = insn
+      @arch_module = Arch.module_of(arch)
+      @csh = csh
+      @raw_insn = insn
       init_detail(insn[:detail]) if detailed?
     end
 
@@ -85,22 +58,22 @@ module Crabstone
       @groups
     end
 
-    def group?(groupid)
+    def group?(group_id)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_insn_group csh, raw_insn, groupid
+      Binding.cs_insn_group(csh, raw_insn, group_id)
     end
 
     def reads_reg?(reg)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_reg_read csh, raw_insn, ARCH_CLASSES[arch].register(reg)
+      Binding.cs_reg_read(csh, raw_insn, @arch_module.register(reg))
     end
 
     def writes_reg?(reg)
       raise_unless_detailed
       raise_if_diet
-      Binding.cs_reg_write csh, raw_insn, ARCH_CLASSES[arch].register(reg)
+      Binding.cs_reg_write(csh, raw_insn, @arch_module.register(reg))
     end
 
     def mnemonic
@@ -116,14 +89,14 @@ module Crabstone
     def op_count(op_type = nil)
       raise_unless_detailed
       if op_type
-        Binding.cs_op_count csh, raw_insn, op_type
+        Binding.cs_op_count(csh, raw_insn, op_type)
       else
         operands.size
       end
     end
 
     def bytes
-      raw_insn[:bytes].first raw_insn[:size]
+      raw_insn[:bytes].first(raw_insn[:size])
     end
 
     # So an Instruction should respond to all the methods in Instruction, and
@@ -174,10 +147,19 @@ module Crabstone
 
     def init_detail(detail)
       @detail     = detail
-      @arch_insn  = @detail[:arch][ARCHS[arch]]
+      @arch_insn  = @detail[:arch][arch_field]
       @regs_read  = @detail[:regs_read].first(@detail[:regs_read_count])
       @regs_write = @detail[:regs_write].first(@detail[:regs_write_count])
       @groups     = @detail[:groups].first(@detail[:groups_count])
+    end
+
+    # Find the field name of Architecture.
+    def arch_field
+      klass = @arch_module.const_get(:Instruction)
+      obj = Binding::Architecture.new
+      Binding::Architecture.members.find do |sym|
+        obj[sym].instance_of?(klass)
+      end
     end
   end
 end
