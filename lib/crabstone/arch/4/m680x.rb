@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'm680x_const'
 
 module Crabstone
@@ -54,11 +55,7 @@ module Crabstone
         :access, :uint8
       )
 
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
+      include Crabstone::Extension::Operand
 
       def register?
         self[:type] == OP_REGISTER
@@ -87,10 +84,6 @@ module Crabstone
       def constant?
         self[:type] == OP_CONSTANT
       end
-
-      def valid?
-        !value.nil?
-      end
     end
 
     class Instruction < FFI::Struct
@@ -100,9 +93,7 @@ module Crabstone
         :operands, [Operand, 9]
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end

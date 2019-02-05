@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'arm_const'
 
 module Crabstone
@@ -46,11 +47,7 @@ module Crabstone
         :neon_lane, :int8
       )
 
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
+      include Crabstone::Extension::Operand
 
       def reg?
         [
@@ -90,10 +87,6 @@ module Crabstone
       def sysreg?
         self[:type] == OP_SYSREG
       end
-
-      def valid?
-        !value.nil?
-      end
     end
 
     class Instruction < FFI::Struct
@@ -111,9 +104,7 @@ module Crabstone
         :operands, [Operand, 36]
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end

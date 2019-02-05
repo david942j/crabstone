@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'tms320c64x_const'
 
 module Crabstone
@@ -34,11 +35,7 @@ module Crabstone
         :value, OperandValue
       )
 
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
+      include Crabstone::Extension::Operand
 
       def reg?
         [
@@ -57,10 +54,6 @@ module Crabstone
 
       def regpair?
         self[:type] == OP_REGPAIR
-      end
-
-      def valid?
-        !value.nil?
       end
     end
 
@@ -88,9 +81,7 @@ module Crabstone
         :parallel, :uint
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end

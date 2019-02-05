@@ -33,6 +33,7 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
       write_file(arch + '.rb', mod, content, <<~REQUIRE.strip)
         require 'ffi'
 
+        require 'crabstone/arch/extension'
         require_relative '#{arch}_const'
       REQUIRE
     end
@@ -49,29 +50,76 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
                    .map(&:strip)
                    .select { |l| l.start_with?('OP_') && !l.index('OP_INVALID') }
                    .map { |l| l.split(' = ').first.strip[3..-1] }
-    ruby_code.insert(idx, "\n  " + <<~RUBY.lines.join('  '))
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("\#{s}?".to_sym)
-        end
-      end
-
-      #{op_types.map { |t| "def #{t.downcase}?\n  #{type_check(t, op_types)}\nend" }.join("\n\n")}
-
-      def valid?
-        !value.nil?
-      end
-    RUBY
+    ruby_code.insert(idx, "\n  " + operand_methods(arch, op_types).lines.join('  '))
 
     # insert Instruction
     idx = ruby_code.index('end', ruby_code.index('class Instruction < '))
     ruby_code.insert(idx, "\n  " + <<~RUBY.lines.join('  '))
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     RUBY
 
     arch_methods(arch, ruby_code)
+  end
+
+  def operand_methods(arch, op_types)
+    # So sad there're exceptions..
+    return <<~RUBY if arch == 'm68k'
+
+      include Crabstone::Extension::Operand
+
+      # Use Extension::Operand#value first
+      alias super_value value
+
+      def value
+        super_value || if mem?
+                         self[:mem]
+                       elsif br_disp?
+                         self[:br_disp]
+                       elsif reg_bits?
+                         self[:register_bits]
+                       end
+      end
+
+      def reg?
+        self[:type] == OP_REG
+      end
+
+      def imm?
+        self[:type] == OP_IMM
+      end
+
+      def mem?
+        self[:type] == OP_MEM
+      end
+
+      def fp_single?
+        self[:type] == OP_FP_SINGLE
+      end
+      alias simm? fp_single?
+
+      def fp_double?
+        self[:type] == OP_FP_DOUBLE
+      end
+      alias dimm? fp_double?
+
+      def reg_bits?
+        self[:type] == OP_REG_BITS
+      end
+
+      def reg_pair?
+        self[:type] == OP_REG_PAIR
+      end
+
+      def br_disp?
+        self[:type] == OP_BR_DISP
+      end
+    RUBY
+
+    <<~RUBY
+      include Crabstone::Extension::Operand
+
+      #{op_types.map { |t| "def #{t.downcase}?\n  #{type_check(t, op_types)}\nend" }.join("\n\n")}
+    RUBY
   end
 
   # Insert special methods for arm64

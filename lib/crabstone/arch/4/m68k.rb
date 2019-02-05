@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'm68k_const'
 
 module Crabstone
@@ -58,18 +59,23 @@ module Crabstone
         :address_mode, :uint
       )
 
+      include Crabstone::Extension::Operand
+
+      # Use Extension::Operand#value first
+      alias super_value value
+
       def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
+        super_value || if mem?
+                         self[:mem]
+                       elsif br_disp?
+                         self[:br_disp]
+                       elsif reg_bits?
+                         self[:register_bits]
+                       end
       end
 
       def reg?
-        [
-          OP_REG,
-          OP_REG_BITS,
-          OP_REG_PAIR
-        ].include?(self[:type])
+        self[:type] == OP_REG
       end
 
       def imm?
@@ -83,10 +89,12 @@ module Crabstone
       def fp_single?
         self[:type] == OP_FP_SINGLE
       end
+      alias simm? fp_single?
 
       def fp_double?
         self[:type] == OP_FP_DOUBLE
       end
+      alias dimm? fp_double?
 
       def reg_bits?
         self[:type] == OP_REG_BITS
@@ -97,33 +105,7 @@ module Crabstone
       end
 
       def br_disp?
-        [
-          OP_BR_DISP,
-          OP_BR_DISP_SIZE_INVALID,
-          OP_BR_DISP_SIZE_BYTE,
-          OP_BR_DISP_SIZE_WORD,
-          OP_BR_DISP_SIZE_LONG
-        ].include?(self[:type])
-      end
-
-      def br_disp_size_invalid?
-        self[:type] == OP_BR_DISP_SIZE_INVALID
-      end
-
-      def br_disp_size_byte?
-        self[:type] == OP_BR_DISP_SIZE_BYTE
-      end
-
-      def br_disp_size_word?
-        self[:type] == OP_BR_DISP_SIZE_WORD
-      end
-
-      def br_disp_size_long?
-        self[:type] == OP_BR_DISP_SIZE_LONG
-      end
-
-      def valid?
-        !value.nil?
+        self[:type] == OP_BR_DISP
       end
     end
 
@@ -141,9 +123,7 @@ module Crabstone
         :op_count, :uint8
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end

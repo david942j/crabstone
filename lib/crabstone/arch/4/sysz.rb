@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'sysz_const'
 
 module Crabstone
@@ -31,11 +32,7 @@ module Crabstone
         :value, OperandValue
       )
 
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
+      include Crabstone::Extension::Operand
 
       def reg?
         [
@@ -55,10 +52,6 @@ module Crabstone
       def acreg?
         self[:type] == OP_ACREG
       end
-
-      def valid?
-        !value.nil?
-      end
     end
 
     class Instruction < FFI::Struct
@@ -68,9 +61,7 @@ module Crabstone
         :operands, [Operand, 6]
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end

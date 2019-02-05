@@ -14,7 +14,8 @@ module Crabstone
       ppc: ARCH_PPC,
       sparc: ARCH_SPARC,
       sysz: ARCH_SYSZ,
-      xcore: ARCH_XCORE
+      xcore: ARCH_XCORE,
+      m68k: ARCH_M68K
     }.invert.freeze
 
     ARCH_CLASSES = {
@@ -25,7 +26,11 @@ module Crabstone
       ARCH_PPC => PPC,
       ARCH_SPARC => Sparc,
       ARCH_SYSZ => SysZ,
-      ARCH_XCORE => XCore
+      ARCH_XCORE => XCore,
+      ARCH_M68K => M68K,
+      ARCH_TMS320C64X => TMS320C64X,
+      ARCH_M680X => M680X,
+      ARCH_EVM => EVM
     }.freeze
 
     def initialize(csh, insn, arch)

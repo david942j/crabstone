@@ -4,6 +4,7 @@
 
 require 'ffi'
 
+require 'crabstone/arch/extension'
 require_relative 'arm64_const'
 
 module Crabstone
@@ -55,11 +56,7 @@ module Crabstone
         self[:ext] != EXT_INVALID
       end
 
-      def value
-        OperandValue.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        end
-      end
+      include Crabstone::Extension::Operand
 
       def reg?
         [
@@ -111,10 +108,6 @@ module Crabstone
       def barrier?
         self[:type] == OP_BARRIER
       end
-
-      def valid?
-        !value.nil?
-      end
     end
 
     class Instruction < FFI::Struct
@@ -126,9 +119,7 @@ module Crabstone
         :operands, [Operand, 8]
       )
 
-      def operands
-        self[:operands].take_while { |op| op[:type] != OP_INVALID }
-      end
+      include Crabstone::Extension::Instruction
     end
   end
 end
