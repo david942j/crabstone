@@ -15,7 +15,10 @@ module Crabstone
       sparc: ARCH_SPARC,
       sysz: ARCH_SYSZ,
       xcore: ARCH_XCORE,
-      m68k: ARCH_M68K
+      m68k: ARCH_M68K,
+      tms320c64x: ARCH_TMS320C64X,
+      m680x: ARCH_M680X,
+      evm: ARCH_EVM
     }.invert.freeze
 
     ARCH_CLASSES = {

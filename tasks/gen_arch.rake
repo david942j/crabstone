@@ -115,11 +115,23 @@ task :gen_arch, :path_to_capstone, :version do |_t, args|
       end
     RUBY
 
-    <<~RUBY
+    normal = <<~RUBY
       include Crabstone::Extension::Operand
 
       #{op_types.map { |t| "def #{t.downcase}?\n  #{type_check(t, op_types)}\nend" }.join("\n\n")}
     RUBY
+    if arch == 'm680x'
+      normal += {
+        reg: :register,
+        imm: :immediate,
+        idx: :indexed,
+        ext: :extended,
+        direct_addr: :direct,
+        rel: :relative,
+        const_val: :constant
+      }.map { |k, v| "alias #{k}? #{v}?\n" }.join
+    end
+    normal
   end
 
   # Insert special methods for arm64

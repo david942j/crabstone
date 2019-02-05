@@ -84,6 +84,13 @@ module Crabstone
       def constant?
         self[:type] == OP_CONSTANT
       end
+      alias reg? register?
+      alias imm? immediate?
+      alias idx? indexed?
+      alias ext? extended?
+      alias direct_addr? direct?
+      alias rel? relative?
+      alias const_val? constant?
     end
 
     class Instruction < FFI::Struct
