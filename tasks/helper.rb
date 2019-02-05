@@ -131,7 +131,6 @@ module Helper
       expect(data.last, "} #{type};")
       temp = []
       data[1..-2].each_with_object(Struct.new) do |line, struct|
-        # TODO: fetch union
         next if line.include?('{') || line.include?('}')
 
         temp << line

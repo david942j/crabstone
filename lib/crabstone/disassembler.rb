@@ -49,14 +49,14 @@ module Crabstone
     end
 
     def syntax=(new_stx)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless SYNTAX[new_stx]
+      Crabstone::Error.raise!(ErrOption) unless SYNTAX[new_stx]
       set_raw_option(OPT_SYNTAX, SYNTAX[new_stx])
       @syntax = new_stx
     end
 
     # @param [Boolean] new_val
     def decomposer=(new_val)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrOption]) unless DETAIL[new_val]
+      Crabstone::Error.raise!(ErrOption) unless DETAIL[new_val]
       set_raw_option(OPT_DETAIL, DETAIL[new_val])
       @decomposer = new_val
     end
@@ -104,9 +104,9 @@ module Crabstone
     end
 
     def reg_name(regid)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDiet]) if DIET_MODE
+      Crabstone::Error.raise!(ErrDiet) if DIET_MODE
       name = Binding.cs_reg_name(csh, regid)
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
@@ -123,7 +123,7 @@ module Crabstone
         count,
         insn_ptr
       )
-      Crabstone.raise_errno(errno) if insn_count.zero?
+      Crabstone::Error.raise_errno!(errno) if insn_count.zero?
 
       convert_disasm_result(insn_ptr, insn_count).tap { Binding.free(insn_ptr.read_pointer) }
     end

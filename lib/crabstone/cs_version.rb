@@ -2,6 +2,8 @@
 
 require 'ffi'
 
+require 'crabstone/version'
+
 module Crabstone
   module_function
 
@@ -13,7 +15,7 @@ module Crabstone
   #   version_require 'crabstone/binding/%v/structs'
   #   # equivalent to "require 'crabstone/binding/4/structs'" if Capstone is version 4.
   def version_require(path_tpl)
-    # TODO: raise proper error if version not supported
+    version_compatitable!
     path = path_tpl.gsub('%v', cs_major_version.to_s)
     require path
   end
@@ -29,6 +31,12 @@ module Crabstone
     min = FFI::MemoryPointer.new(:int)
     Binding.cs_version(maj, min)
     @cs_major_version = maj.read_int
+  end
+
+  # Checks the cs_major is less or equal to Crabstone::VERSION.
+  def version_compatitable!
+    @version_compatitable ||=
+      cs_major_version <= Crabstone::VERSION.split('.').first.to_i && cs_major_version >= 3
   end
 
   # @private

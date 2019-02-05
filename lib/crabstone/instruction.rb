@@ -19,14 +19,14 @@ module Crabstone
     def name
       raise_if_diet
       name = Binding.cs_insn_name(csh, id)
-      Crabstone.raise_errno(ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
     def group_name(grp)
       raise_if_diet
       name = Binding.cs_group_name(csh, Integer(grp))
-      Crabstone.raise_errno(ERRNO_KLASS[ErrCsh]) unless name
+      Crabstone::Error.raise!(ErrCsh) unless name
       name
     end
 
@@ -138,11 +138,11 @@ module Crabstone
     private
 
     def raise_unless_detailed
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDetail]) unless detailed?
+      Crabstone::Error.raise!(ErrDetail) unless detailed?
     end
 
     def raise_if_diet
-      Crabstone.raise_errno(Crabstone::ERRNO_KLASS[ErrDiet]) if DIET_MODE
+      Crabstone::Error.raise!(ErrDiet) if DIET_MODE
     end
 
     def init_detail(detail)
