@@ -8,11 +8,9 @@ module Crabstone
     # @param [Integer, String, Symbol] reg
     # @return [Integer]
     def register(reg)
-      if reg.is_a?(Integer)
-        value?(reg) ? reg : invalid
-      else
-        dict[reg.to_s.upcase] || invalid
-      end
+      return reg if value?(reg)
+
+      dict[reg.to_s.upcase] || invalid
     end
 
     private
