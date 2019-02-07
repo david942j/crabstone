@@ -1,0 +1,17 @@
+---
+version: "2"
+plugins:
+  duplication:
+    exclude_patterns:
+      - lib/crabstone/arch/*/*.rb
+      - lib/crabstone/binding/*/*.rb
+      - spec/
+  structure:
+    exclude_patterns:
+      - lib/crabstone/arch/*/*.rb
+      - tasks/
+checks:
+  method-lines:
+    enabled: false
+  method-count:
+    enabled: false

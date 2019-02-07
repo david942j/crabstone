@@ -122,26 +122,21 @@ module Crabstone
     # members that have special handling for detail mode or diet mode are
     # handled above. The rest is dynamically dispatched below.
     def method_missing(meth, *args)
-      if raw_insn.members.include?(meth)
-        # Dispatch to toplevel Instruction class ( this file )
-        raw_insn[meth]
-      else
-        # Nothing else is available without details.
-        unless detailed?
-          raise(
-            NoMethodError,
-            "Either CS_DETAIL is off, or #{self.class} doesn't implement #{meth}"
-          )
-        end
-        # Dispatch to the architecture specific Instruction ( in arch/ )
-        if @arch_insn.respond_to?(meth)
-          @arch_insn.__send__(meth, *args)
-        elsif @arch_insn.members.include?(meth)
-          @arch_insn[meth]
-        else
-          super
-        end
+      # Dispatch to toplevel Instruction class ( this file )
+      return raw_insn[meth] if raw_insn.members.include?(meth)
+
+      # Nothing else is available without details.
+      unless detailed?
+        raise(
+          NoMethodError,
+          "Either CS_DETAIL is off, or #{self.class} doesn't implement #{meth}"
+        )
       end
+      # Dispatch to the architecture specific Instruction ( in arch/ )
+      return @arch_insn.__send__(meth, *args) if @arch_insn.respond_to?(meth)
+      return @arch_insn[meth] if @arch_insn.members.include?(meth)
+
+      super
     end
 
     def respond_to_missing?(meth, include_private = true)
