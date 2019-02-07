@@ -6,7 +6,7 @@
 crabstone
 ====
 
-Current library support: 4.0.1
+Current library support: Capstone 3 \& 4
 ----
 
 ( FROM THE CAPSTONE README )
@@ -17,21 +17,30 @@ disasm engine for binary analysis and reversing in the security community.
 Created by Nguyen Anh Quynh, then developed and maintained by a small community,
 Capstone offers some unparalleled features:
 
-- Support multiple hardware architectures: ARM, ARM64 (aka ARMv8), Mips, X86, Sparc & SystemZ.
+- Support multiple hardware architectures: ARM, ARM64 (ARMv8), Ethereum VM, M68K,
+  Mips, MOS65XX, PPC, Sparc, SystemZ, TMS320C64X, M680X, XCore and X86 (including X86_64).
 
 - Having clean/simple/lightweight/intuitive architecture-neutral API.
 
 - Provide details on disassembled instruction (called “decomposer” by others).
 
 - Provide semantics of the disassembled instruction, such as list of implicit
-     registers read & written.
+  registers read & written.
 
-- Implemented in pure C language, with lightweight wrappers for C++, Python,
-     Ruby, OCaml, C#, Java and Go available.
+- Implemented in pure C language, with lightweight bindings for D, Clojure, F#,
+  Common Lisp, Visual Basic, PHP, PowerShell, Emacs, Haskell, Perl, Python,
+  Ruby, C#, NodeJS, Java, GO, C++, OCaml, Lua, Rust, Delphi, Free Pascal & Vala
+  ready either in main code, or provided externally by the community.
 
-- Native support for Windows & *nix platforms (MacOSX, Linux & *BSD confirmed).
+- Native support for all popular platforms: Windows, Mac OSX, iOS, Android,
+  Linux, \*BSD, Solaris, etc.
 
 - Thread-safe by design.
+
+- Special support for embedding into firmware or OS kernel.
+
+- High performance & suitable for malware analysis (capable of handling various
+  X86 malware tricks).
 
 - Distributed under the open source BSD license.
 
@@ -85,7 +94,7 @@ If you feel like chipping in, especially with better tests or examples, or (plea
 
 
 	Library Author: Nguyen Anh Quynh
-	Binding Authors: Nguyen Anh Quynh, Tan Sheng Di, Ben Nagy
+	Binding Authors: Nguyen Anh Quynh, Tan Sheng Di, Ben Nagy, david942j
 	License: BSD style - details in the LICENSE file
 	(c) 2013 COSEINC. All Rights Reserved.
 
