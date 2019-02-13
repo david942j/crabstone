@@ -18,14 +18,33 @@ module Generate
       FileUtils.mkdir_p(@target_dir)
     end
 
-    def glob(pattern, &block)
-      Dir.glob(File.join(@cs_path, pattern), &block)
-    end
-
     def write_dotversion
       File.open(File.join(@target_dir, '.version'), 'w') do |f|
         f.puts @version
       end
+    end
+
+    private
+
+    def glob(pattern, &block)
+      Dir.glob(File.join(@cs_path, pattern), &block)
+    end
+
+    def write_file(filename, rqr, mod, res)
+      puts "Writing #{filename}"
+      IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
+        # frozen_string_literal: true
+
+        # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
+
+        #{rqr.strip}
+
+        module Crabstone
+          module #{mod}
+        #{res.strip.lines.map { |l| l.strip.empty? ? "\n" : '    ' + l }.join}
+          end
+        end
+      TEMPLATE
     end
   end
 end

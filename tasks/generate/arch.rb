@@ -18,7 +18,7 @@ module Generate
         arch = py_mod == 'systemz' ? 'sysz' : py_mod
         mod = module_name(arch)
         content = insert_methods(arch, Python.new(py_mod).to_layout.join("\n"))
-        write_file(arch + '.rb', mod, content, <<~REQUIRE.strip)
+        write_file(arch + '.rb', <<~REQUIRE, mod, content)
           require 'ffi'
 
           require 'crabstone/arch/extension'
@@ -38,8 +38,7 @@ module Generate
         end.join
         res.gsub!(/\n{3,}/, "\n\n") # Remove more than two empty lines
         res << "\nextend Register"
-        write_file("#{arch}_const.rb", module_name(arch), res.strip,
-                   "require 'crabstone/arch/register'")
+        write_file("#{arch}_const.rb", "require 'crabstone/arch/register'", module_name(arch), res)
 
         # Generate spec/arch/*_spec.rb as well
         gen_spec(res, arch)
@@ -198,23 +197,6 @@ module Generate
           #{types.map { |t| "it '#{t}' do\n  end" }.join("\n\n  ")}
         end
       RUBY
-    end
-
-    def write_file(filename, mod, res, rqr)
-      puts "Writing #{filename}"
-      IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
-        # frozen_string_literal: true
-
-        # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
-
-        #{rqr}
-
-        module Crabstone
-          module #{mod}
-        #{res.lines.map { |l| l.strip.empty? ? "\n" : '    ' + l }.join}
-          end
-        end
-      TEMPLATE
     end
   end
 end
