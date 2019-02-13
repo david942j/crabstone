@@ -2,8 +2,7 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
-import 'tasks/gen_arch.rake'
-import 'tasks/gen_binding.rake'
+import 'tasks/generate/all.rake'
 
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.patterns = ['lib/**/*.rb', 'spec/**/*.rb', 'examples/*.rb', 'tasks/**/*.{rake,rb}']
