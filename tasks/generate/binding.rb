@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'generator'
-require_relative 'helper'
 require_relative 'hparser'
 
 module Generate
@@ -28,6 +27,7 @@ module Generate
           )
         end
       RUBY
+      # XXX: someday +detail+ might not end with Architecture.
 
       write_file('detail.rb', <<~REQUIRE, 'Binding', content)
         require 'ffi'

@@ -1,31 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'generator'
-require_relative 'helper'
 require_relative 'python'
 
 module Generate
   class Arch < Generate::Generator
     # We have two kinds of files to be generated:
     # 1. <arch>.rb, which defines the structure of <arch>_insn.
-    # 2. <arch>_const.rb, defines constants in the architecture.
-
-    def gen_structs
-      glob('bindings/python/capstone/*.py') do |file|
-        next if file.end_with?('_const.py', '__init__.py')
-
-        py_mod = File.basename(file).sub('.py', '')
-        arch = py_mod == 'systemz' ? 'sysz' : py_mod
-        mod = module_name(arch)
-        content = insert_methods(arch, Python.new(py_mod).to_layout.join("\n"))
-        write_file(arch + '.rb', <<~REQUIRE, mod, content)
-          require 'ffi'
-
-          require 'crabstone/arch/extension'
-          require_relative '#{arch}_const'
-        REQUIRE
-      end
-    end
+    # 2. <arch>_const.rb, defines constants of the architecture.
 
     # Simply use values generated under capstone/bindings/python.
     def gen_consts
@@ -42,6 +24,23 @@ module Generate
 
         # Generate spec/arch/*_spec.rb as well
         gen_spec(res, arch)
+      end
+    end
+
+    def gen_structs
+      glob('bindings/python/capstone/*.py') do |file|
+        next if file.end_with?('_const.py', '__init__.py')
+
+        py_mod = File.basename(file).sub('.py', '')
+        arch = py_mod == 'systemz' ? 'sysz' : py_mod
+        mod = module_name(arch)
+        content = insert_methods(arch, Python.new(py_mod).to_layout.join("\n"))
+        write_file(arch + '.rb', <<~REQUIRE, mod, content)
+          require 'ffi'
+
+          require 'crabstone/arch/extension'
+          require_relative '#{arch}_const'
+        REQUIRE
       end
     end
 
