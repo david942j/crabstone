@@ -66,4 +66,9 @@ describe Crabstone::Disassembler do
     # XXX: Is this behavior correct?
     expect { cs.disasm('A', 0) }.to raise_error(Crabstone::ErrOK)
   end
+
+  it 'version' do
+    cs = described_class.new(Crabstone::ARCH_X86, Crabstone::MODE_64)
+    expect(cs.version.first <= Crabstone::BINDING_MAJ).to be true
+  end
 end

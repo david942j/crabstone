@@ -2,6 +2,7 @@
 
 require 'ffi'
 
+require 'crabstone/constants'
 require 'crabstone/version'
 
 module Crabstone
@@ -25,18 +26,25 @@ module Crabstone
   # @return [Integer]
   #   Returns the major version of Capstone.
   def cs_major_version
-    return @cs_major_version if defined?(@cs_major_version)
+    cs_version.first
+  end
+
+  # @return [(Integer, Integer)]
+  def cs_version
+    return @cs_version if defined?(@cs_version)
 
     maj = FFI::MemoryPointer.new(:int)
     min = FFI::MemoryPointer.new(:int)
     Binding.cs_version(maj, min)
-    @cs_major_version = maj.read_int
+    @cs_version = [maj.read_int, min.read_int]
   end
 
   # Checks the cs_major is less or equal to Crabstone::VERSION.
   def version_compatitable!
     @version_compatitable ||=
-      cs_major_version <= Crabstone::VERSION.split('.').first.to_i && cs_major_version >= 3
+      cs_major_version <= Crabstone::BINDING_MAJ && cs_major_version >= 3
+    maj, min = cs_version
+    raise "FATAL: Crabstone v#{VERSION} doesn't support binding Capstone v#{maj}.#{min}" unless @version_compatitable
   end
 
   # @private

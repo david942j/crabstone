@@ -5,7 +5,6 @@ require 'ffi'
 require 'crabstone/binding'
 require 'crabstone/error'
 require 'crabstone/instruction'
-require 'crabstone/version'
 
 module Crabstone
   class Disassembler
@@ -28,9 +27,6 @@ module Crabstone
     attr_reader :arch, :mode, :csh, :syntax, :decomposer
 
     def initialize(arch, mode)
-      maj, min = version
-      raise "FATAL: Crabstone v#{VERSION} doesn't support binding Capstone v#{maj}.#{min}" if maj > BINDING_MAJ
-
       @arch = arch
       @mode = mode
       @p_csh = FFI::MemoryPointer.new(:ulong_long)
@@ -61,10 +57,7 @@ module Crabstone
     end
 
     def version
-      maj = FFI::MemoryPointer.new(:int)
-      min = FFI::MemoryPointer.new(:int)
-      Binding.cs_version(maj, min)
-      [maj.read_int, min.read_int]
+      Crabstone.cs_version
     end
 
     def diet?
