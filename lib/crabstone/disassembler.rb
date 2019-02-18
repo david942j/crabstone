@@ -3,6 +3,7 @@
 require 'ffi'
 
 require 'crabstone/binding'
+require 'crabstone/cs_version'
 require 'crabstone/error'
 require 'crabstone/instruction'
 
