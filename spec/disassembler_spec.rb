@@ -71,4 +71,8 @@ describe Crabstone::Disassembler do
     cs = described_class.new(Crabstone::ARCH_X86, Crabstone::MODE_64)
     expect(cs.version.first <= Crabstone::BINDING_MAJ).to be true
   end
+
+  it 'initialize error' do
+    expect { described_class.new(Crabstone::ARCH_MAX, 0) }.to raise_error(Crabstone::ErrArch)
+  end
 end

@@ -141,7 +141,7 @@ module Crabstone
     end
 
     def safe
-      yield.tap { |res| Crabstone.raise_errno(res) unless res.zero? }
+      yield.tap { |res| Crabstone::Error.raise_errno!(res) unless res.zero? }
     end
   end
 end
