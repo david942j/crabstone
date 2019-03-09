@@ -8,9 +8,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.patterns = ['lib/**/*.rb', 'spec/**/*.rb', 'examples/*.rb', 'tasks/**/*.{rake,rb}']
 end
 
-RSpec::Core::RakeTask.new(:spec) do |task|
-  task.pattern = './spec/**/*_spec.rb'
-  task.rspec_opts = ['--color', '--require spec_helper', '--order rand']
-end
+RSpec::Core::RakeTask.new(:spec)
 
 task default: %i[rubocop spec]

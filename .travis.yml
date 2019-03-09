@@ -1,8 +1,8 @@
 language: ruby
 dist: xenial
 os:
-- linux
-- osx
+  - linux
+  - osx
 
 addons:
   apt:

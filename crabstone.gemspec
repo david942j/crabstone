@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.3'
 
-  s.add_runtime_dependency 'ffi' unless RUBY_PLATFORM =~ /java/
+  s.add_runtime_dependency 'ffi'
 
   s.add_development_dependency 'rake', '~> 12'
   s.add_development_dependency 'rspec', '~> 3.8'
