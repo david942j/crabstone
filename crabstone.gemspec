@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'ffi'
 
-  s.add_development_dependency 'rake', '~> 12'
+  s.add_development_dependency 'rake', '~> 13'
   s.add_development_dependency 'rspec', '~> 3.8'
   s.add_development_dependency 'rubocop', '~> 0.63'
   s.add_development_dependency 'simplecov', '~> 0.16'
