@@ -1,12 +1,30 @@
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.3
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
 
 Layout/EndOfLine:
   EnforcedStyle: lf
 
-Lint/HandleExceptions:
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Lint/SuppressedException:
   Enabled: false
 
 Metrics/AbcSize:
@@ -21,10 +39,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/LineLength:
-  Enabled: true
-  Max: 120
-
 Metrics/MethodLength:
   Enabled: false
 
@@ -34,5 +48,20 @@ Metrics/ModuleLength:
 Style/Documentation: # TODO: enable this cop
   Enabled: false
 
+Style/ExponentialNotation:
+  Enabled: true
+
 Style/FormatStringToken:
   Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
