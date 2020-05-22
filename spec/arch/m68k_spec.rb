@@ -65,8 +65,8 @@ describe 'Crabstone::M68K' do
     # divs.l d0, d1:d7
     op = op_of("\x4c\x40\x7c\x01", 1)
     expect(op.reg_pair?).to be true
-    expect(@cs.reg_name(op.value[:reg_0] + 1)).to eq 'd1'
-    expect(@cs.reg_name(op.value[:reg_1] + 1)).to eq 'd7'
+    expect(@cs.reg_name(op.value[:reg_0])).to eq 'd1'
+    expect(@cs.reg_name(op.value[:reg_1])).to eq 'd7'
   end
 
   it 'br_disp' do
