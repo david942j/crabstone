@@ -17,8 +17,6 @@ setup_linux()
   # install capstone
   # There's libcapstone3 available on apt, but we want to test against a newer version.
   install_from_src capstone 'https://github.com/aquynh/capstone/archive/4.0.2.tar.gz'
-
-  export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/capstone/:$LD_LIBRARY_PATH
 }
 
 setup_osx()
@@ -28,9 +26,9 @@ setup_osx()
   export DYLD_LIBRARY_PATH=/usr/local/opt/capstone/lib:$DYLD_LIBRARY_PATH
 }
 
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+if [[ "$CI_OS_NAME" == "macOS" ]]; then
   setup_osx
-elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+elif [[ "$CI_OS_NAME" == "Linux" ]]; then
   setup_linux
 fi
 set +e +x
