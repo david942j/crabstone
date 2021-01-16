@@ -17,8 +17,6 @@ setup_linux()
   # install capstone
   # There's libcapstone3 available on apt, but we want to test against a newer version.
   install_from_src capstone 'https://github.com/aquynh/capstone/archive/4.0.2.tar.gz'
-
-  export LD_LIBRARY_PATH=$GITHUB_WORKSPACE/capstone/:$LD_LIBRARY_PATH
 }
 
 setup_osx()

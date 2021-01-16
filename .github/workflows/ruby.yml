@@ -22,6 +22,8 @@ jobs:
       env:
         CI_OS_NAME: ${{ runner.os }}
     - name: Build and test with Rake
+      env:
+        LD_LIBRARY_PATH: ./capstone
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
