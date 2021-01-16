@@ -51,6 +51,8 @@ module Generate
 
     def normalize_class_name(py_class)
       if py_class.start_with?('Cs')
+        return 'Encoding' if py_class.end_with?('Encoding')
+
         'Instruction'
       else
         raise "Unexpcted class name: #{py_class.inspect}" unless py_class.downcase.start_with?(arch.downcase)

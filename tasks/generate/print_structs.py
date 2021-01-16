@@ -10,7 +10,7 @@ def str_type(tp):
     else:
         return tp.__name__
 def display(klass):
-    # If any of the fields is not a native type, recusive it.
+    # If any of the fields is not a native type, call display recursively.
     for var, tp in klass._fields_:
         if not tp.__name__.startswith('c_'):
             if hasattr(tp, '_length_'):

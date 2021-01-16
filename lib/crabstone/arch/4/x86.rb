@@ -52,7 +52,7 @@ module Crabstone
       end
     end
 
-    class Instruction < FFI::Struct
+    class Encoding < FFI::Struct
       layout(
         :modrm_offset, :uint8,
         :disp_offset, :uint8,
@@ -60,8 +60,6 @@ module Crabstone
         :imm_offset, :uint8,
         :imm_size, :uint8
       )
-
-      include Crabstone::Extension::Instruction
     end
 
     class Instruction < FFI::Struct
@@ -84,8 +82,10 @@ module Crabstone
         :eflags, :ulong,
         :op_count, :uint8,
         :operands, [Operand, 8],
-        :encoding, Instruction
+        :encoding, Encoding
       )
+
+      include Crabstone::Extension::Instruction
     end
   end
 end
