@@ -35,7 +35,7 @@ module Generate
         arch = py_mod == 'systemz' ? 'sysz' : py_mod
         mod = module_name(arch)
         content = insert_methods(arch, Python.new(py_mod).to_layout.join("\n"))
-        write_file(arch + '.rb', <<~REQUIRE, mod, content)
+        write_file("#{arch}.rb", <<~REQUIRE, mod, content)
           require 'ffi'
 
           require 'crabstone/arch/extension'
@@ -53,15 +53,15 @@ module Generate
 
       # insert class Operand
       idx = ruby_code.index('end', op_index)
-      op_types = File.readlines(File.join(@target_dir, arch + '_const.rb'))
+      op_types = File.readlines(File.join(@target_dir, "#{arch}_const.rb"))
                      .map(&:strip)
                      .select { |l| l.start_with?('OP_') && !l.index('OP_INVALID') }
                      .map { |l| l.split(' = ').first.strip[3..-1] }
-      ruby_code.insert(idx, "\n  " + operand_methods(arch, op_types).lines.join('  '))
+      ruby_code.insert(idx, "\n  #{operand_methods(arch, op_types).lines.join('  ')}")
 
       # insert Instruction
       idx = ruby_code.index('end', ruby_code.index('class Instruction < '))
-      ruby_code.insert(idx, "\n  " + <<~RUBY.lines.join('  '))
+      ruby_code.insert(idx, "\n  #{<<~RUBY.lines.join('  ')}")
         include Crabstone::Extension::Instruction
       RUBY
 
@@ -147,7 +147,7 @@ module Generate
       return ruby_code unless arch == 'arm64'
 
       idx = ruby_code.index(")\n", ruby_code.index('class Operand < ')) + 2
-      ruby_code.insert(idx, '  ' + <<~RUBY.lines.join('  '))
+      ruby_code.insert(idx, "  #{<<~RUBY.lines.join('  ')}")
         def shift?
           self[:shift][:type] != SFT_INVALID
         end
@@ -168,7 +168,7 @@ module Generate
       types = op_types.select { |c| c.index(type) }
       return "self[:type] == OP_#{type}" if types.size == 1
 
-      "[\n    #{types.map { |c| 'OP_' + c }.join(",\n    ")}\n  ].include?(self[:type])"
+      "[\n    #{types.map { |c| "OP_#{c}" }.join(",\n    ")}\n  ].include?(self[:type])"
     end
 
     def gen_spec(constants, arch)
@@ -177,7 +177,7 @@ module Generate
               .select { |c| c.start_with?('OP_') && !c.index('INVALID') }
               .map { |c| c.split('=').first.strip.slice(3..-1).downcase }
 
-      spec_file = File.expand_path(File.join(Dir.pwd, 'spec', 'arch', arch + '_spec.rb'))
+      spec_file = File.expand_path(File.join(Dir.pwd, 'spec', 'arch', "#{arch}_spec.rb"))
       return if File.exist?(spec_file)
 
       puts "Writing #{File.basename(spec_file)}"
