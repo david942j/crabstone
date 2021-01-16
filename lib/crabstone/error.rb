@@ -9,19 +9,33 @@ module Crabstone
   class Error < StandardError; end
 
   class ErrArch < Error; end
+
   class ErrCsh < Error; end
+
   class ErrHandle < Error; end
+
   class ErrMem < Error; end
+
   class ErrMode < Error; end
+
   class ErrOK < Error; end
+
   class ErrOption < Error; end
+
   class ErrDetail < Error; end
+
   class ErrMemSetup < Error; end
+
   class ErrVersion < Error; end
+
   class ErrDiet < Error; end
+
   class ErrSkipData < Error; end
+
   class ErrX86ATT < Error; end
+
   class ErrX86Intel < Error; end
+
   class ErrX86MASM < Error; end
 
   class Error

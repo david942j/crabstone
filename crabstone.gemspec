@@ -31,13 +31,13 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/david942j/crabstone'
   }
 
-  s.required_ruby_version = '>= 2.3'
+  s.required_ruby_version = '>= 2.4'
 
   s.add_runtime_dependency 'ffi'
 
   s.add_development_dependency 'rake', '~> 13'
   s.add_development_dependency 'rspec', '~> 3.9'
-  s.add_development_dependency 'rubocop', '~> 0.84'
+  s.add_development_dependency 'rubocop', '~> 1'
   s.add_development_dependency 'simplecov', '~> 0.18'
   s.add_development_dependency 'versionomy', '~> 0.5'
 end

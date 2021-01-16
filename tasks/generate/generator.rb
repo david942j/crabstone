@@ -41,7 +41,7 @@ module Generate
 
         module Crabstone
           module #{mod}
-        #{res.strip.lines.map { |l| l.strip.empty? ? "\n" : '    ' + l }.join}
+        #{res.strip.lines.map { |l| l.strip.empty? ? "\n" : "    #{l}" }.join}
           end
         end
       TEMPLATE

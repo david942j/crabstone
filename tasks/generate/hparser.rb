@@ -51,8 +51,9 @@ module Generate
       loop do
         data << yield.tap do |s|
           s.each_char do |c|
-            if c == '{' then @count += 1
-            elsif c == '}' then @count -= 1
+            case c
+            when '{' then @count += 1
+            when '}' then @count -= 1
             end
           end
         end
@@ -65,7 +66,7 @@ module Generate
       return if defined?(@code)
 
       # This is for developer to use, I don't care cmd injection or somewhat
-      @code = `cpp #{@include_path.map { |p| '-I' + p }.join(' ')} #{@file}`
+      @code = `cpp #{@include_path.map { |p| "-I#{p}" }.join(' ')} #{@file}`
       @code = @code.lines.reject { |l| l.start_with?('#') }
     end
 

@@ -30,7 +30,7 @@ module Generate
           ret.last.slice!(-1) if ret.last.end_with?(',')
           ret << '  )' << 'end'
         else
-          ret << '    ' + to_field(line) + ','
+          ret << "    #{to_field(line)},"
         end
       end
     end
