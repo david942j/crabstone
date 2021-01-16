@@ -28,9 +28,9 @@ setup_osx()
   export DYLD_LIBRARY_PATH=/usr/local/opt/capstone/lib:$DYLD_LIBRARY_PATH
 }
 
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+if [[ "$CI_OS_NAME" == "macOS" ]]; then
   setup_osx
-elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+elif [[ "$CI_OS_NAME" == "Linux" ]]; then
   setup_linux
 fi
 set +e +x
