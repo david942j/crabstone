@@ -1,4 +1,4 @@
-name: Ruby
+name: build
 
 on:
   push:
@@ -7,24 +7,32 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [ubuntu, macos]
+        ruby-version: ['2.6', '2.7', head]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v1
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6.x
-    - name: Install capstone
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Install Capstone
       run: source .github/workflows/install.sh
       env:
         CI_OS_NAME: ${{ runner.os }}
-    - name: Build and test with Rake
+    - name: Run tests
+      run: bundle exec rake
       env:
         LD_LIBRARY_PATH: ./capstone
-      run: |
-        gem install bundler
-        bundle install --jobs 4 --retry 3
-        bundle exec rake
+        DYLD_LIBRARY_PATH: /usr/local/opt/capstone/lib
+    - name: Publish code coverage
+      if: ${{ success() && runner.os == 'Linux' }}
+      uses: paambaati/codeclimate-action@v2.7.5
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
