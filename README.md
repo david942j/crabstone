@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/crabstone.svg)](https://badge.fury.io/rb/crabstone)
+[![Build Status](https://github.com/david942j/crabstone/workflows/build/badge.svg)](https://github.com/david942j/crabstone/actions)
 [![Issue Count](https://codeclimate.com/github/david942j/crabstone/badges/issue_count.svg)](https://codeclimate.com/github/david942j/crabstone)
 [![Test Coverage](https://codeclimate.com/github/david942j/crabstone/badges/coverage.svg)](https://codeclimate.com/github/david942j/crabstone/coverage)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)

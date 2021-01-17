@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e -x
 
 install_from_src()
@@ -16,6 +18,7 @@ setup_linux()
 {
   # install capstone
   # There's libcapstone3 available on apt, but we want to test against a newer version.
+  sudo apt install make
   install_from_src capstone 'https://github.com/aquynh/capstone/archive/4.0.2.tar.gz'
 }
 
@@ -23,12 +26,12 @@ setup_osx()
 {
   # install capstone
   brew install capstone
-  export DYLD_LIBRARY_PATH=/usr/local/opt/capstone/lib:$DYLD_LIBRARY_PATH
 }
 
-if [[ "$CI_OS_NAME" == "macOS" ]]; then
+if [[ "$1" == "macOS" ]]; then
   setup_osx
-elif [[ "$CI_OS_NAME" == "Linux" ]]; then
+elif [[ "$1" == "Linux" ]]; then
   setup_linux
 fi
+
 set +e +x
