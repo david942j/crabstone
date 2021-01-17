@@ -23,9 +23,7 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Install Capstone
-      run: source .github/workflows/install.sh
-      env:
-        CI_OS_NAME: ${{ runner.os }}
+      run: .github/workflows/install.sh ${{ runner.os }}
     - name: Run tests
       run: bundle exec rake
       env:

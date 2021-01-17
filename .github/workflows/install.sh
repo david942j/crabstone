@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e -x
 
 install_from_src()
@@ -26,9 +28,10 @@ setup_osx()
   brew install capstone
 }
 
-if [[ "$CI_OS_NAME" == "macOS" ]]; then
+if [[ "$1" == "macOS" ]]; then
   setup_osx
-elif [[ "$CI_OS_NAME" == "Linux" ]]; then
+elif [[ "$1" == "Linux" ]]; then
   setup_linux
 fi
+
 set +e +x
