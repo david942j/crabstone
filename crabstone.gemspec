@@ -38,6 +38,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 13'
   s.add_development_dependency 'rspec', '~> 3.9'
   s.add_development_dependency 'rubocop', '~> 1'
-  s.add_development_dependency 'simplecov', '~> 0.18'
+  s.add_development_dependency 'simplecov', '~> 0.17', '< 0.18'
   s.add_development_dependency 'versionomy', '~> 0.5'
 end
