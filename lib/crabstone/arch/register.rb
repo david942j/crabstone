@@ -19,7 +19,7 @@ module Crabstone
       return @dict if defined?(@dict)
 
       keys = constants.select { |k| k.to_s.start_with?('REG_') }
-      @dict = keys.map { |k| [k.to_s[4..-1], const_get(k)] }.to_h.freeze
+      @dict = keys.map { |k| [k.to_s[4..], const_get(k)] }.to_h.freeze
     end
 
     def value?(val)
