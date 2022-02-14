@@ -64,7 +64,8 @@ describe Crabstone::Instruction do
   end
 
   it 'release' do
-    inst = @cs.disasm("\xc3", 0).first
-    Crabstone::Binding::Instruction.release(inst.raw_insn)
+    pointer = @cs.disasm("\xc3", 0).first.raw_insn.pointer
+    pointer.autorelease = false
+    Crabstone::Binding::Instruction.release(pointer)
   end
 end
