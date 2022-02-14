@@ -7,13 +7,9 @@ module Crabstone
   module Binding
     class Instruction < FFI::ManagedStruct
       def self.release(obj)
-        return if defined?(@freed)
-
-        @freed = true
-        ptr = obj.is_a?(FFI::Pointer) ? obj : obj.pointer
-        detail_ptr = ptr.+(Instruction.offset_of(:detail)).read_pointer
+        detail_ptr = obj.+(Instruction.offset_of(:detail)).read_pointer
         Binding.free(detail_ptr)
-        Binding.free(ptr)
+        Binding.free(obj)
       end
     end
 
