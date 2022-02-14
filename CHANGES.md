@@ -1,5 +1,9 @@
+## 4.0.4
+* Ensured Ruby version support 2.6 ~ 3.1
+* [Diff from previous release](https://github.com/david942j/crabstone/compare/v4.0.3...v4.0.4)
+
 ## 4.0.3
-* Fix Instruction class redefinition ([#12](https://github.com/david942j/crabstone/pull/12))
+* Fixed Instruction class redefinition ([#12](https://github.com/david942j/crabstone/pull/12))
 * [Diff from previous release](https://github.com/david942j/crabstone/compare/v4.0.2...v4.0.3)
 
 ## 4.0.2
