@@ -57,7 +57,7 @@ module Generate
       else
         raise "Unexpcted class name: #{py_class.inspect}" unless py_class.downcase.start_with?(arch.downcase)
 
-        py_class[arch.size..-1].sub('Op', 'Operand').sub('Mem', 'Memory')
+        py_class[arch.size..].sub('Op', 'Operand').sub('Mem', 'Memory')
       end
     end
 
@@ -82,7 +82,7 @@ module Generate
     def cpy_to_sym(str)
       return normalize_class_name(str) unless str.start_with?('c_')
 
-      str = str[2..-1]
+      str = str[2..]
       case str
       when 'uint', 'int', 'ulong', 'long', 'bool', 'float', 'ushort', 'short', 'double' then str.to_sym
       when 'ubyte' then :uint8

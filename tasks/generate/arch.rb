@@ -56,7 +56,7 @@ module Generate
       op_types = File.readlines(File.join(@target_dir, "#{arch}_const.rb"))
                      .map(&:strip)
                      .select { |l| l.start_with?('OP_') && !l.index('OP_INVALID') }
-                     .map { |l| l.split(' = ').first.strip[3..-1] }
+                     .map { |l| l.split(' = ').first.strip[3..] }
       ruby_code.insert(idx, "\n  #{operand_methods(arch, op_types).lines.join('  ')}")
 
       # insert Instruction
