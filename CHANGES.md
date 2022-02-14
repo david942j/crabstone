@@ -1,3 +1,13 @@
+## 4.0.3
+* Fix Instruction class redefinition ([#12](https://github.com/david942j/crabstone/pull/12))
+* [Diff from previous release](https://github.com/david942j/crabstone/compare/v4.0.2...v4.0.3)
+
+## 4.0.2
+* Supported binding Capstone 4.0.2
+* Raised errors when the version of libcapstone is not supported
+* Internal refactors and code cleanup
+* [Diff from previous release](https://github.com/david942j/crabstone/compare/4.0.0...v4.0.2)
+
 ## 4.0.0
 * Supported *both* Capstone 3.x and 4.x.
 * Supported 4 new architectures: M68K, M680X, TMS320C64x, and EVM.
