@@ -56,9 +56,7 @@ describe Crabstone::Disassembler do
     expect(cs.disasm("\x90\xFFP", 0).map { |i| i.mnemonic.to_s }).to eq %w[nop]
 
     cs.skipdata { raise 'ggsmida' }
-    expect { cs.disasm("\xff", 0) }
-      .to output("Error in skipdata callback: ggsmida\n").to_stderr
-                                                         .and raise_error(Crabstone::ErrOK)
+    expect { cs.disasm("\xff", 0) }.to raise_error(Crabstone::ErrSkipData)
   end
 
   it 'disasm error' do

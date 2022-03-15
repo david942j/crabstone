@@ -81,9 +81,8 @@ module Crabstone
           code = code.read_array_of_uchar(sz).pack('c*')
           begin
             Integer(yield(code, offset))
-          rescue StandardError
-            warn "Error in skipdata callback: #{$ERROR_INFO}"
-            # It will go on to crash, but now at least there's more info :)
+          rescue StandardError => e
+            raise Crabstone::ErrSkipData, "Error in skipdata callback: #{e.message}"
           end
         end
       end
