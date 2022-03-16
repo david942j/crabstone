@@ -93,7 +93,7 @@ module Generate
     class Field
       class << self
         def parse(str)
-          tokens = str.split(' ')
+          tokens = str.split
           var = tokens.pop
           tokens << var.slice!(0..var.rindex('*')) if var.start_with?('*')
           var = parse_var(var)

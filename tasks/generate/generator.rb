@@ -32,7 +32,7 @@ module Generate
 
     def write_file(filename, rqr, mod, res)
       puts "Writing #{filename}"
-      IO.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
+      File.binwrite(File.join(@target_dir, filename), <<~TEMPLATE)
         # frozen_string_literal: true
 
         # THIS FILE WAS AUTO-GENERATED -- DO NOT EDIT!
