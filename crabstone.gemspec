@@ -10,7 +10,6 @@ require 'crabstone/version'
 Gem::Specification.new do |s|
   s.name       = 'crabstone'
   s.version    = Crabstone::VERSION
-  s.date       = Date.today.to_s
   s.authors    = ['Ben Nagy', 'david942j']
   s.license    = 'BSD-3-Clause'
   s.email      = ['crabstone@ben.iagu.net', 'david942j@gmail.com']

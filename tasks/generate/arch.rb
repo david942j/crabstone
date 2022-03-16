@@ -181,7 +181,7 @@ module Generate
       return if File.exist?(spec_file)
 
       puts "Writing #{File.basename(spec_file)}"
-      IO.binwrite(spec_file, <<~RUBY)
+      File.binwrite(spec_file, <<~RUBY)
         # frozen_string_literal: true
 
         require 'crabstone/disassembler'
