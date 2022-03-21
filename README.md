@@ -48,7 +48,7 @@ Capstone offers some unparalleled features:
 To install:
 ----
 
-First install the capstone library from either https://github.com/aquynh/capstone
+First install the capstone library from either https://github.com/capstone-engine/capstone
 or http://www.capstone-engine.org
 
 Then:
@@ -60,17 +60,17 @@ gem install crabstone
 To write code:
 ----
 
-Check the tests in [Capstone](https://github.com/aquynh/capstone) for more examples. Here is "Hello World":
+Check the tests in [Capstone](https://github.com/capstone-engine/capstone) for
+more examples. Here is "Hello World":
 ```ruby
-
 require 'crabstone'
-include Crabstone
+
 arm =
   "\xED\xFF\xFF\xEB\x04\xe0\x2d\xe5\x00\x00\x00\x00\xe0\x83\x22" \
   "\xe5\xf1\x02\x03\x0e\x00\x00\xa0\xe3\x02\x30\xc1\xe7\x00\x00\x53\xe3"
 
 begin
-  cs = Disassembler.new(ARCH_ARM, MODE_ARM)
+  cs = Crabstone::Disassembler.new(Crabstone::ARCH_ARM, Crabstone::MODE_ARM)
   puts "Hello from Capstone v#{cs.version.join('.')}!"
   puts 'Disasm:'
 
@@ -78,14 +78,30 @@ begin
     cs.disasm(arm, 0x1000).each do |i|
       printf("0x%x:\t%s\t\t%s\n", i.address, i.mnemonic, i.op_str)
     end
-  rescue StandardError => e
+  rescue Crabstone::Error => e
     raise "Disassembly error: #{e.message}"
   ensure
     cs.close
   end
-rescue StandardError => e
+rescue Crabstone::Error => e
   raise "Unable to open engine: #{e.message}"
 end
+```
+
+Sample output (exact content may differ according to the Capstone engine version
+you are using):
+
+```
+Hello from Capstone v3.0!
+Disasm:
+0x1000: bl              #0xfbc
+0x1004: str             lr, [sp, #-4]!
+0x1008: andeq           r0, r0, r0
+0x100c: str             r8, [r2, #-0x3e0]!
+0x1010: mcreq           p2, #0, r0, c3, c1, #7
+0x1014: mov             r0, #0
+0x1018: strb            r3, [r1, r2]
+0x101c: cmp             r3, #0
 ```
 
 Contributing:
