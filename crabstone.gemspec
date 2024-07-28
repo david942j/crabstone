@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/david942j/crabstone'
   }
 
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 3.1'
 
   s.add_runtime_dependency 'ffi'
 
