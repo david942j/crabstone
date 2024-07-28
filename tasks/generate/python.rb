@@ -9,7 +9,8 @@ module Generate
   class Python
     attr_reader :arch
 
-    def initialize(file)
+    def initialize(path_to_cs_py_binding, file)
+      @path_to_py = path_to_cs_py_binding
       @file = file
       @arch = Helper.module_name(@file).downcase
     end
@@ -17,7 +18,7 @@ module Generate
     # Use an extra python script to read those structs out and print them in normalized form to have the parsing
     # procedure much easier.
     def to_layout
-      res = `#{File.join(__dir__, 'print_structs.py')} #{@file}`
+      res = `#{File.join(__dir__, 'print_structs.py')} '#{@path_to_py}' '#{@file}'`
       raise 'Unexpected error in python script' unless $CHILD_STATUS.exitstatus.zero?
 
       first = true
