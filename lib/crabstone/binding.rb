@@ -41,7 +41,7 @@ module Crabstone
     # Wrap to prevent function not found in elder Capstone.
     def self.safe_attach(*args)
       attach_function(*args)
-    rescue FFI::NotFoundError
+    rescue FFI::NotFoundError # rubocop: disable Lint/SuppressedException
     end
 
     # New APIs since Capstone 4.
