@@ -34,7 +34,7 @@ module Generate
         py_mod = File.basename(file).sub('.py', '')
         arch = py_mod == 'systemz' ? 'sysz' : py_mod
         mod = module_name(arch)
-        content = insert_methods(arch, Python.new(py_mod).to_layout.join("\n"))
+        content = insert_methods(arch, Python.new(cs_path('bindings/python/capstone'), py_mod).to_layout.join("\n"))
         write_file("#{arch}.rb", <<~REQUIRE, mod, content)
           require 'ffi'
 

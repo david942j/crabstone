@@ -26,8 +26,12 @@ module Generate
 
     private
 
+    def cs_path(sub = '')
+      File.join(@cs_path, sub)
+    end
+
     def glob(pattern, &block)
-      Dir.glob(File.join(@cs_path, pattern), &block)
+      Dir.glob(cs_path(pattern), &block)
     end
 
     def write_file(filename, rqr, mod, res)
