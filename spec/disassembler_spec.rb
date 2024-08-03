@@ -67,7 +67,7 @@ describe Crabstone::Disassembler do
 
   it 'version' do
     cs = described_class.new(Crabstone::ARCH_X86, Crabstone::MODE_64)
-    expect(cs.version.first <= Crabstone::VERSION.to_i).to be true
+    expect(cs.version.first).to be Crabstone::VERSION_MAJOR
   end
 
   it 'initialize error' do
