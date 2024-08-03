@@ -68,11 +68,7 @@ module Crabstone
       include Crabstone::Extension::Operand
 
       def reg?
-        [
-          OP_REG,
-          OP_REG_MRS,
-          OP_REG_MSR
-        ].include?(self[:type])
+        self[:type] == OP_REG
       end
 
       def imm?
@@ -92,14 +88,6 @@ module Crabstone
 
       def cimm?
         self[:type] == OP_CIMM
-      end
-
-      def reg_mrs?
-        self[:type] == OP_REG_MRS
-      end
-
-      def reg_msr?
-        self[:type] == OP_REG_MSR
       end
 
       def pstate?

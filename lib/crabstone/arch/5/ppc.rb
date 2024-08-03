@@ -52,10 +52,6 @@ module Crabstone
       def mem?
         self[:type] == OP_MEM
       end
-
-      def crx?
-        self[:type] == OP_CRX
-      end
     end
 
     class Instruction < FFI::Struct

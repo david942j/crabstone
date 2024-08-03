@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'crabstone/constants'
 require 'crabstone/disassembler'
 
 describe 'Crabstone::PPC' do
@@ -35,9 +36,14 @@ describe 'Crabstone::PPC' do
   it 'crx' do
     # bdztla  4*cr5+eq,0xffffffe4
     op = op_of("\x41\x56\xff\xe7", 0)
-    expect(op.crx?).to be true
-    expect(op.value[:scale]).to be
-    expect(@cs.reg_name(op.value[:reg])).to eq 'cr5'
-    expect(op.value[:cond]).to be Crabstone::PPC::BC_EQ
+    if Crabstone::VERSION_MAJOR < 5
+      expect(op.crx?).to be true
+      expect(op.value[:scale]).to be 4
+      expect(@cs.reg_name(op.value[:reg])).to eq 'cr5'
+      expect(op.value[:cond]).to be Crabstone::PPC::BC_EQ
+    else
+      expect(op.reg?).to be true
+      expect(op.value).to be Crabstone::PPC::REG_CR5EQ
+    end
   end
 end

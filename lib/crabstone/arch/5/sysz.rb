@@ -35,10 +35,7 @@ module Crabstone
       include Crabstone::Extension::Operand
 
       def reg?
-        [
-          OP_REG,
-          OP_ACREG
-        ].include?(self[:type])
+        self[:type] == OP_REG
       end
 
       def imm?
@@ -47,10 +44,6 @@ module Crabstone
 
       def mem?
         self[:type] == OP_MEM
-      end
-
-      def acreg?
-        self[:type] == OP_ACREG
       end
     end
 

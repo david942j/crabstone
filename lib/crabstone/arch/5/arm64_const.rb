@@ -1090,8 +1090,6 @@ module Crabstone
     OP_MEM = 3
     OP_FP = 4
     OP_CIMM = 64
-    OP_REG_MRS = 65
-    OP_REG_MSR = 66
     OP_PSTATE = 67
     OP_SYS = 68
     OP_SVCR = 69

@@ -26,7 +26,6 @@ module Crabstone
     OP_REG = 1
     OP_IMM = 2
     OP_MEM = 3
-    OP_CRX = 64
 
     REG_INVALID = 0
     REG_CARRY = 2
