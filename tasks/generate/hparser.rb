@@ -92,9 +92,12 @@ module Generate
 
     class Field
       class << self
+        # parse('unsigned int *field [10];')
+        #   => Field.new(['field', 10], :uint32, 1)
         def parse(str)
           tokens = str.split
           var = tokens.pop
+          var = tokens.pop + var while var.start_with?('[')
           tokens << var.slice!(0..var.rindex('*')) if var.start_with?('*')
           var = parse_var(var)
           type, ref_c, type_s = parse_type(tokens.join(' '))
@@ -124,6 +127,7 @@ module Generate
           when /^uint(8|16|32|64)_t$/ then str[0..-3].to_sym
           when 'unsigned int' then :uint32
           when 'char' then str.to_sym
+          when '_Bool' then :bool
           end
         end
       end
