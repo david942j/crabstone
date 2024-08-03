@@ -9,6 +9,6 @@ namespace :generate do
     Rake::Task['generate:arch'].invoke(args.path_to_capstone, args.version)
     Rake::Task['generate:binding'].invoke(args.path_to_capstone, args.version)
 
-    Rake::Task['rubocop:auto_correct'].invoke
+    Rake::Task['rubocop:autocorrect'].invoke
   end
 end

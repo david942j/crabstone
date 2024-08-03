@@ -26,8 +26,8 @@ module Generate
 
     private
 
-    def cs_path(sub = '')
-      File.join(@cs_path, sub)
+    def cs_path(*paths)
+      File.join(@cs_path, *paths)
     end
 
     def glob(pattern, &block)

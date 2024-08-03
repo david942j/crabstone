@@ -53,8 +53,8 @@ module Generate
 
     def parser
       HParser.new do |config|
-        config.include_path << File.join(@cs_path, 'include')
-        config.file = File.join(@cs_path, 'include', @version.major >= 4 ? 'capstone' : '', 'capstone.h')
+        config.include_path << cs_path('include')
+        config.file = cs_path('include', @version.major >= 4 ? 'capstone' : '', 'capstone.h')
       end
     end
   end

@@ -15,6 +15,7 @@ module Generate
         arch = File.basename(file).sub('_const.py', '')
         res = File.foreach(file).map do |line|
           next '' if line.strip.start_with?('#')
+          next '' if line.start_with?('from')
 
           line.strip.empty? ? "\n" : line.gsub("#{arch.upcase}_", '')
         end.join
