@@ -49,7 +49,7 @@ module Crabstone
   # @private
   module Binding
     extend FFI::Library
-    ffi_lib ['capstone', 'libcapstone.so.4', 'libcapstone.so.3']
+    ffi_lib ['capstone', 'libcapstone.so.5', 'libcapstone.so.4', 'libcapstone.so.3']
 
     attach_function :cs_version, %i[pointer pointer], :uint
   end

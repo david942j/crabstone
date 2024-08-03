@@ -63,8 +63,8 @@ describe 'Crabstone::ARM' do
 
   it 'sysreg' do
     # msr     CPSR_fc, r6
-    op = op_of("\x86\xf3\x00\x89", Crabstone::MODE_THUMB, 0)
+    op = op_of("\x96\xf3\x00\x89", Crabstone::MODE_THUMB, 0)
     expect(op.sysreg?).to be true
-    expect(op.value).to be Crabstone::ARM::SYSREG_CPSR_C | Crabstone::ARM::SYSREG_CPSR_F
+    expect(op.value).to be Crabstone::ARM::SYSREG_SPSR_C | Crabstone::ARM::SYSREG_SPSR_F
   end
 end
