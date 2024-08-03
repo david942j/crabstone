@@ -2,7 +2,6 @@
 
 require 'ffi'
 
-require 'crabstone/constants'
 require 'crabstone/version'
 
 module Crabstone
@@ -42,7 +41,7 @@ module Crabstone
   # Checks the cs_major is less or equal to Crabstone::VERSION.
   def version_compatitable!
     @version_compatitable ||=
-      cs_major_version <= Crabstone::BINDING_MAJ && cs_major_version >= 3
+      cs_major_version <= VERSION.split('.').first.to_i && cs_major_version >= 3
     maj, min = cs_version
     raise "FATAL: Crabstone v#{VERSION} doesn't support binding Capstone v#{maj}.#{min}" unless @version_compatitable
   end

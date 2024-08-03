@@ -2,7 +2,6 @@
 
 require 'crabstone/arch'
 require 'crabstone/binding'
-require 'crabstone/constants'
 require 'crabstone/error'
 
 module Crabstone
