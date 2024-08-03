@@ -9,15 +9,28 @@ module Generate
     # 1. <arch>.rb, which defines the structure of <arch>_insn.
     # 2. <arch>_const.rb, defines constants of the architecture.
 
+    def gen_constants
+      file = cs_path('bindings/python/capstone/__init__.py')
+      res = File.foreach(file).map do |line|
+        next "\n" if line.strip.empty?
+        next '' if line.include?('ctypes')
+        next '' unless line.match?(/^CS_[[:alnum:]]+_/)
+
+        line.gsub('CS_', '')
+      end.join
+
+      write_file('constants.rb', '', nil, res)
+    end
+
     # Simply use values generated under capstone/bindings/python.
-    def gen_consts
+    def gen_arch_consts
       glob('bindings/python/capstone/*_const.py') do |file|
         arch = File.basename(file).sub('_const.py', '')
         res = File.foreach(file).map do |line|
-          next '' if line.strip.start_with?('#')
-          next '' if line.start_with?('from')
+          next '' if line.strip.start_with?('#') || line.start_with?('from')
+          next "\n" if line.strip.empty?
 
-          line.strip.empty? ? "\n" : line.gsub("#{arch.upcase}_", '')
+          line.gsub("#{arch.upcase}_", '').gsub('CS_', 'Crabstone::')
         end.join
         res.gsub!(/\n{3,}/, "\n\n") # Remove more than two empty lines
         res << "\nextend Register"
