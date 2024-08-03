@@ -31,6 +31,12 @@ module Crabstone
       when ARCH_TMS320C64X then TMS320C64X
       when ARCH_M680X then M680X
       when ARCH_EVM then EVM
+      when ARCH_MOS65XX then MOS65XXX
+      when ARCH_WASM then WASM
+      when ARCH_BPF then BPF
+      when ARCH_RISCV then RISCV
+      when ARCH_SH then SH
+      when ARCH_TRICORE then TRICORE
       end
     end
   end
