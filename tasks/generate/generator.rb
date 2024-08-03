@@ -44,9 +44,9 @@ module Generate
         #{rqr.strip}
 
         module Crabstone
-          module #{mod}
+          #{mod.nil? ? '' : "module #{mod}"}
         #{res.strip.lines.map { |l| l.strip.empty? ? "\n" : "    #{l}" }.join}
-          end
+          #{mod.nil? ? '' : 'end'}
         end
       TEMPLATE
     end
