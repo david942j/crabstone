@@ -41,6 +41,11 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Naming/ConstantName:
+  Enabled: true
+  Exclude:
+    - lib/crabstone/arch/*/*.rb
+
 Naming/VariableNumber:
   Enabled: false
 

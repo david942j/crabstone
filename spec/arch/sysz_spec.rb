@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'crabstone/constants'
 require 'crabstone/disassembler'
 
 describe 'Crabstone::SysZ' do
@@ -35,7 +36,12 @@ describe 'Crabstone::SysZ' do
   it 'acreg' do
     # ear %r7, %a8
     op = op_of("\xb2\x4f\x00\x78", 1)
-    expect(op.reg? && op.acreg?).to be true
-    expect(op.value).to be 8
+    expect(op.reg?).to be true
+    if Crabstone::VERSION_MAJOR < 5
+      expect(op.acreg?).to be true
+      expect(op.value).to be 8
+    else
+      expect(op.value).to be Crabstone::SysZ::REG_A8
+    end
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'crabstone/constants'
 require 'crabstone/disassembler'
 
 describe 'Crabstone::ARM64' do
@@ -25,8 +26,8 @@ describe 'Crabstone::ARM64' do
   end
 
   it 'mem' do
-    # prfm    pldl1keep, [x26, w6, uxtw]
-    op = op_of("\x40\x4b\xa6\xf8", 1)
+    # ldr    x9, [x26, w6, uxtw]
+    op = op_of("\x49\x4b\x66\xf8", 1)
     expect(op.mem?).to be true
     expect(@cs.reg_name(op.value[:base])).to eq 'x26'
     expect(@cs.reg_name(op.value[:index])).to eq 'w6'
@@ -51,14 +52,14 @@ describe 'Crabstone::ARM64' do
   it 'reg_mrs' do
     # mrs     x9, midr_el1
     op = op_of("\x09\x00\x38\xd5", 1)
-    expect(op.reg_mrs?).to be true
+    expect(op.reg_mrs?).to be true if Crabstone::VERSION_MAJOR < 5
     expect(op.value).to be Crabstone::ARM64::SYSREG_MIDR_EL1
   end
 
   it 'reg_msr' do
-    # msr     dbgdtrrx_el0, x12
+    # msr     dbgdtrtx_el0, x12
     op = op_of("\x0c\x05\x13\xd5", 0)
-    expect(op.reg_msr?).to be true
+    expect(op.reg_msr?).to be true if Crabstone::VERSION_MAJOR < 5
     expect(op.value).to be Crabstone::ARM64::SYSREG_DBGDTRTX_EL0
   end
 
@@ -77,6 +78,8 @@ describe 'Crabstone::ARM64' do
   end
 
   it 'prefetch' do
+    skip 'https://github.com/capstone-engine/capstone/issues/2417' if Crabstone::VERSION_MAJOR == 5
+
     # prfm    pldl1keep, [x26, w6, uxtw]
     op = op_of("\x40\x4b\xa6\xf8", 0)
     expect(op.prefetch?).to be true
