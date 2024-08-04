@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'crabstone/disassembler'
+require 'crabstone/error'
 
 describe 'Crabstone::BPF' do
   def op_of(code, mode, index)
@@ -66,7 +67,7 @@ describe 'Crabstone::BPF' do
   it 'extended' do
     # xaddw [r2+0x10], r1
     code = "\xc3\x12\x00\x10\x00\x00\x00\x00"
-    expect { op_of(code, Crabstone::MODE_BIG_ENDIAN | Crabstone::MODE_BPF_CLASSIC, 1) }.to raise_error
+    expect { op_of(code, Crabstone::MODE_BIG_ENDIAN | Crabstone::MODE_BPF_CLASSIC, 1) }.to raise_error Crabstone::Error
 
     op = op_of(code, Crabstone::MODE_BIG_ENDIAN | Crabstone::MODE_BPF_EXTENDED, 1)
     expect(op.value).to eq Crabstone::BPF::REG_R1
