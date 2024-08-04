@@ -8,9 +8,8 @@ module Crabstone
     module Operand
       def value
         self[:value].class.members.find do |s|
-          return self[:value][s] if __send__("#{s}?".to_sym)
-        rescue NoMethodError
-          next
+          sym = "#{s}?".to_sym
+          return self[:value][s] if respond_to?(sym) && __send__(sym)
         end
       end
 
