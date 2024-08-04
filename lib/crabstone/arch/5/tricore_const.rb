@@ -10,7 +10,6 @@ module Crabstone
     OP_REG = Crabstone::OP_REG
     OP_IMM = Crabstone::OP_IMM
     OP_MEM = Crabstone::OP_MEM
-    OP_COUNT = 8
 
     REG_INVALID = 0
     REG_FCX = 1

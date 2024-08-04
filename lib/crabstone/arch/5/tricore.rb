@@ -44,10 +44,6 @@ module Crabstone
       def mem?
         self[:type] == OP_MEM
       end
-
-      def count?
-        self[:type] == OP_COUNT
-      end
     end
 
     class Instruction < FFI::Struct

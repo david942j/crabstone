@@ -69,8 +69,10 @@ module Generate
       idx = ruby_code.index('end', op_index)
       op_types = File.readlines(File.join(@target_dir, "#{arch}_const.rb"))
                      .map(&:strip)
-                     .select { |l| l.start_with?('OP_') && !l.index('OP_INVALID') }
+                     .select { |l| l.start_with?('OP_') && !l.include?('INVALID') }
                      .map { |l| l.split(' = ').first.strip[3..] }
+      reject_op_types(op_types, arch)
+
       ruby_code.insert(idx, "\n  #{operand_methods(arch, op_types).lines.join('  ')}")
 
       # insert Instruction
@@ -80,6 +82,19 @@ module Generate
       RUBY
 
       arch_methods(arch, ruby_code)
+    end
+
+    def reject_op_types(op_types, arch)
+      op_types.reject! do |t|
+        case arch
+        when 'sh'
+          # OP_DSP_* and OP_MEM_* are used as sub-types, they are not an OP type.
+          t.include?('DSP') || t.include?('MEM_')
+        when 'wasm'
+          # Not used as OP types in WASMDisassembler.c.
+          %w[NONE IMM].include?(t)
+        end
+      end
     end
 
     def operand_methods(arch, op_types)
@@ -178,7 +193,7 @@ module Generate
     #   type_check('REG', ['REG', 'MSR_REG', 'MRS_REG', 'IMM'])
     #   #=> "[\n  OP_REG,\n  OP_MSR_REG,\n  OP_MRS_REG\n].include?(self[:type])"
     def type_check(type, op_types)
-      # XXX: Use `index` maybe have false positive..
+      # XXX: Use `index` may have false positives..
       types = op_types.select { |c| c.index(type) }
       return "self[:type] == OP_#{type}" if types.size == 1
 
