@@ -1,3 +1,9 @@
+## 5.0.0
+* Support Capstone 5!
+* New architectures: BPF, MOS65XX, RISC-V, TriCore, SuperH, and WASM
+* Ensured Ruby version support 3.1 ~ 3.3
+* [Diff from previous release](https://github.com/david942j/crabstone/compare/v4.0.4...v5.0.0)
+
 ## 4.0.4
 * Ensured Ruby version support 2.6 ~ 3.1
 * [Diff from previous release](https://github.com/david942j/crabstone/compare/v4.0.3...v4.0.4)

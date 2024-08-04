@@ -7,7 +7,7 @@
 crabstone
 ====
 
-Current library support: Capstone 3 \& 4
+Current library support: Capstone 3 \& 4 \& 5
 ----
 
 ( FROM THE CAPSTONE README )
