@@ -38,10 +38,6 @@ module Crabstone
 
       include Crabstone::Extension::Operand
 
-      def none?
-        self[:type] == OP_NONE
-      end
-
       def int7?
         self[:type] == OP_INT7
       end
@@ -66,10 +62,6 @@ module Crabstone
           OP_VARUINT64,
           OP_UINT64
         ].include?(self[:type])
-      end
-
-      def imm?
-        self[:type] == OP_IMM
       end
 
       def brtable?

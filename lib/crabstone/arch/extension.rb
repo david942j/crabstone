@@ -9,6 +9,8 @@ module Crabstone
       def value
         self[:value].class.members.find do |s|
           return self[:value][s] if __send__("#{s}?".to_sym)
+        rescue NoMethodError
+          next
         end
       end
 

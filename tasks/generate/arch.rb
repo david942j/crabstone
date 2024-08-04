@@ -71,7 +71,7 @@ module Generate
                      .map(&:strip)
                      .select { |l| l.start_with?('OP_') && !l.include?('INVALID') }
                      .map { |l| l.split(' = ').first.strip[3..] }
-      sh_reject_op_types(op_types) if arch == 'sh'
+      reject_op_types(op_types, arch)
 
       ruby_code.insert(idx, "\n  #{operand_methods(arch, op_types).lines.join('  ')}")
 
@@ -84,9 +84,17 @@ module Generate
       arch_methods(arch, ruby_code)
     end
 
-    def sh_reject_op_types(op_types)
-      # OP_DSP_* and OP_MEM_* are used as sub-types, they are not an OP type.
-      op_types.reject! { |t| t.include?('DSP') || t.include?('MEM_') }
+    def reject_op_types(op_types, arch)
+      op_types.reject! do |t|
+        case arch
+        when 'sh'
+          # OP_DSP_* and OP_MEM_* are used as sub-types, they are not an OP type.
+          t.include?('DSP') || t.include?('MEM_')
+        when 'wasm'
+          # Not used as OP types in WASMDisassembler.c.
+          %w[NONE IMM].include?(t)
+        end
+      end
     end
 
     def operand_methods(arch, op_types)
