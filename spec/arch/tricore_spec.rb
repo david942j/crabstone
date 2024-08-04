@@ -28,6 +28,10 @@ describe 'Crabstone::TRICORE' do
   end
 
   it 'mem' do
+    # The latest Capstone package on MacOS is 5.0.1 without the fix https://github.com/capstone-engine/capstone/pull/2275
+    # TODO: remove this once Capstone 5.0.2+ is released to MacOS
+    skip if Crabstone::VERSION_MAJOR == 5 && RbConfig::CONFIG['host_os'] =~ /darwin/
+
     # ld.bu  d15, [a15]#0x81
     op = op_of("\x09\xff\x41\x28", Crabstone::MODE_TRICORE_162, 1)
     expect(op.mem?).to be true
