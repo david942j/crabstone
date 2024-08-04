@@ -29,6 +29,7 @@ jobs:
       env:
         LD_LIBRARY_PATH: ./capstone
         DYLD_LIBRARY_PATH: /usr/local/opt/capstone/lib
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
     - name: Publish code coverage
       if: ${{ success() && env.CC_TEST_REPORTER_ID }}
       uses: paambaati/codeclimate-action@v2.7.5
